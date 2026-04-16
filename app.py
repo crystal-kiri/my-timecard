@@ -17,7 +17,6 @@ is_night = (now.hour >= 17 or now.hour < 8)
 MAIN_GRAY = "#454444"
 
 if is_night:
-    # 🌙 ミッドナイトブルー系
     bg_color = "#605D86"      # 深いネイビー
     disp_text = "#FDFBF9"     # 少し柔らかい白（真っ白より目に優しい）
     box_bg = "rgba(255, 255, 255, 0.06)"
@@ -70,7 +69,7 @@ st.markdown(f"""
     /* 1. 氏名選択の枠を「ころんと白く」＆「ど真ん中」 */
     div[data-baseweb="select"] > div {{
         background-color: #ffffff !important;
-        color: {MAIN_GRAY} !important;
+        color: {disp_text} !important;
         height: 64px !important;                   /* 高さを少し微調整 */
         border-radius: 20px !important;
         border: none !important;
