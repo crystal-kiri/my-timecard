@@ -120,8 +120,8 @@ st.markdown(f"""
 
     /* 3. 虹枠ボタン：横幅を強制的に広げる */
     div.stButton > button {
-        width: 100% !important;
-        min-width: 100% !important; 
+        width: 100%% !important;
+        min-width: 100%% !important; 
         display: block !important;
         height: 80px !important;
         background-color: white !important;
@@ -135,7 +135,7 @@ st.markdown(f"""
     }
 
     div.stButton {
-        width: 100% !important;
+        width: 100%% !important;
     }
     </style>
     """, unsafe_allow_html=True)
