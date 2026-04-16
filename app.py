@@ -4,7 +4,7 @@ from datetime import datetime
 from streamlit_gsheets import GSheetsConnection
 import os
 import io
-st.title("タイムカードアプリ v2")
+
 # ==========================================
 # 1. ページ設定と時間判定
 # ==========================================
