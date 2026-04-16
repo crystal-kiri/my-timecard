@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
+from streamlit_gsheets import GSheetsConnection
 import os
 import io
 
@@ -244,7 +245,7 @@ with st.expander("🛠 管理者メニュー"):
         tab1, tab2 = st.tabs(["📊 打刻データ出力", "👥 スタッフ管理"])
 
         # --- タブ1: ログ表示と税理士提出用Excel出力 ---
-        # --- タブ1: ログ表示と税理士提出用Excel出力 ---
+        
         with tab1:
             if os.path.exists(LOG_FILE):
                 df_l = pd.read_csv(LOG_FILE, encoding="utf_8_sig")
