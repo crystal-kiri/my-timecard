@@ -127,7 +127,7 @@ st.markdown(f"""
         color: #454444 !important;
         font-size: 20px !important;
         font-weight: 500 !important;
-        border: 2px solid !important;
+        border: 1px solid !important;
         border-image: linear-gradient(90deg, #ffeb3b, #ff9800, #f44336, #e91e63, #3f51b5) 1 !important;
         
         /* あの「角削り」デザインを復活させつつ横長に対応 */
