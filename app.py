@@ -228,19 +228,22 @@ selected_name = st.selectbox("USER", names, label_visibility="collapsed")
 if 'msg' not in st.session_state: st.session_state.msg = "打刻してください"
 st.markdown(f'<div class="balloon-msg">{st.session_state.msg}</div>', unsafe_allow_html=True)
 
-# 打刻関数
 def save_to_gsheets(name, action):
-    # 現在のデータを取得
-    existing_data = conn.read(spreadsheet=URL, worksheet="Sheet1")
+    # 1. 新しい1行だけのデータを作る
     new_entry = pd.DataFrame([{
         "名前": name,
         "日付": datetime.now().strftime('%Y-%m-%d'),
         "時刻": datetime.now().strftime('%H:%M:%S'),
         "区分": action
     }])
-    # 合体させて保存
-    updated_df = pd.concat([existing_data, new_entry], ignore_index=True)
-    conn.update(spreadsheet=URL, worksheet="Sheet1", data=updated_df)
+    
+    # 2. シートの末尾に「追記」する（これだけでOK！）
+    # conn.create を使うと、既存データの下に自動で追加されます
+    conn.create(
+        spreadsheet=URL, 
+        worksheet="Sheet1", 
+        data=new_entry
+    )
 
 c1, c2 = st.columns(2)
 with c1:
