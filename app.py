@@ -286,29 +286,45 @@ if 'msg' not in st.session_state:
 
 def save_to_gsheets(name, action):
     now_jst = datetime.now(JST)
+    today = now_jst.strftime('%Y-%m-%d')
+    time_str = now_jst.strftime('%H:%M:%S')
 
     try:
-        personal_data = conn.read(spreadsheet=URL, worksheet=name, ttl=0)
-    except Exception as e:
-        st.error(f"{name} のシートが見つかりません: {e}")
+        df = conn.read(spreadsheet=URL, worksheet=name, ttl=0)
+    except Exception:
+        st.error(f"{name} のシートが見つかりません")
         return
 
-    new_entry = pd.DataFrame([{
-        "日付": now_jst.strftime('%Y-%m-%d'),
-        "時刻": now_jst.strftime('%H:%M:%S'),
-        "区分": action
-    }])
+    if df is None or df.empty:
+        df = pd.DataFrame(columns=["日付", "出勤", "退勤"])
 
-    if personal_data is None or personal_data.empty:
-        updated_df = new_entry
+    # ここで列を強制的に固定
+    for col in ["日付", "出勤", "退勤"]:
+        if col not in df.columns:
+            df[col] = ""
+
+    df = df[["日付", "出勤", "退勤"]].copy()
+    df["日付"] = df["日付"].astype(str)
+
+    today_rows = df[df["日付"] == today]
+
+    if not today_rows.empty:
+        idx = today_rows.index[-1]
+        if action == "出勤":
+            df.at[idx, "出勤"] = time_str
+        else:
+            df.at[idx, "退勤"] = time_str
     else:
-        updated_df = pd.concat([personal_data, new_entry], ignore_index=True)
+        new_row = pd.DataFrame([{
+            "日付": today,
+            "出勤": time_str if action == "出勤" else "",
+            "退勤": time_str if action == "退勤" else ""
+        }])
+        df = pd.concat([df, new_row], ignore_index=True)
 
-    try:
-        conn.update(spreadsheet=URL, worksheet=name, data=updated_df)
-        st.success(f"{name} シートに保存しました")
-    except Exception as e:
-        st.error(f"{name} シートへの保存に失敗しました: {e}")
+    # 最後にも3列だけに固定して上書き
+    out_df = df[["日付", "出勤", "退勤"]].copy()
+    conn.update(spreadsheet=URL, worksheet=name, data=out_df)
 
 c1, c2 = st.columns(2)
 
