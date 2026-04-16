@@ -10,7 +10,9 @@ import io
 # ==========================================
 st.set_page_config(page_title="CRYSTAL TIME CARD", layout="centered")
 
-now = datetime.now()
+from datetime import timedelta, timezone
+JST = timezone(timedelta(hours=+9), 'JST')
+now = datetime.now(JST)
 is_night = (now.hour >= 17 or now.hour < 8)
 MAIN_GRAY = "#454444"
 
