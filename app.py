@@ -149,7 +149,7 @@ st.markdown(f"""
     }}
     </style>
     """, unsafe_allow_html=True)
-    st.markdown("""
+st.markdown("""
 <style>
 [data-testid="stStatusWidget"] {
     display: none !important;
