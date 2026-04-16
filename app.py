@@ -119,9 +119,9 @@ st.markdown(f"""
     @keyframes fadeIn {{ from {{ opacity: 0; transform: translateY(5px); }} to {{ opacity: 1; transform: translateY(0); }} }}
 
     /* 3. 虹枠ボタン：横幅を強制的に広げる */
-    div.stButton > button {
-        width: 100%% !important;
-        min-width: 100%% !important; 
+    div.stButton > button {{
+        width: 100% !important;
+        min-width: 100% !important; 
         display: block !important;
         height: 80px !important;
         background-color: white !important;
@@ -132,11 +132,11 @@ st.markdown(f"""
         border-image: linear-gradient(90deg, #ffeb3b, #ff9800, #f44336, #e91e63, #3f51b5) 1 !important;
         clip-path: none !important;
         border-radius: 0px !important;
-    }
+    }}
 
-    div.stButton {
-        width: 100%% !important;
-    }
+    div.stButton {{
+        width: 100% !important;
+    }}
     </style>
     """, unsafe_allow_html=True)
 
