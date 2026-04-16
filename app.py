@@ -296,12 +296,11 @@ with st.expander("🛠 管理者メニュー"):
         
         with tab1:
             try:
+            # try: の行よりも、さらに「半角スペース4つ分」右にずらす必要があります
             df_l = conn.read(spreadsheet=URL, ttl=0)
         except Exception as e:
             st.error(f"Googleスプレッドシートにアクセスできません: {e}")
             df_l = pd.DataFrame()
-            if df_l is not None and not df_l.empty:
-                st.write("### 🔍 勤務データの確認")
                 
                 # 表示用のフィルタ設定
                 df_view = df_l.copy()
