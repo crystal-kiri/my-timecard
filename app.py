@@ -295,10 +295,12 @@ with st.expander("🛠 管理者メニュー"):
         # --- タブ1: ログ表示と税理士提出用Excel出力 ---
         
         with tab1:
-            if os.path.exists(LOG_FILE):
-                df_l = pd.read_csv(LOG_FILE, encoding="utf_8_sig")
+            df_l = conn.read(spreadsheet=URL, ttl=0)
+            
+            if df_l is not None and not df_l.empty:
                 st.write("### ログ一覧")
-                st.dataframe(df_l.sort_index(ascending=False), use_container_width=True)
+                # 最新の打刻を一番上に表示
+                st.dataframe(df_l.iloc[::-1], use_container_width=True)
 
                 st.divider()
                 st.write("### 📄 税理士提出用ファイルの作成")
