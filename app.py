@@ -230,8 +230,8 @@ st.markdown(f'<div class="balloon-msg">{st.session_state.msg}</div>', unsafe_all
 
 # --- 修正後のコード ---
 def save_to_gsheets(name, action):
-    # ここにURLを再定義するか、secretsから直接読み込むようにします
-    target_url = st.secrets["spreadsheet"] 
+    # ここに実際のスプレッドシートのURLを直接貼り付ける（これが一番確実！）
+    target_url = "https://docs.google.com/spreadsheets/d/1muQ7GR7RbVtOBYS3nV-xy7VCq66QqE04TqFxZo5ndtg/edit"
     
     new_entry = pd.DataFrame([{
         "名前": name,
@@ -241,7 +241,7 @@ def save_to_gsheets(name, action):
     }])
     
     conn.create(
-        spreadsheet=target_url, # ここを target_url に
+        spreadsheet=target_url,
         worksheet="Sheet1", 
         data=new_entry
     )
