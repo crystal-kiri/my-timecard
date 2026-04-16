@@ -120,11 +120,9 @@ st.markdown(f"""
 
     /* 3. 虹枠ボタン：横幅を強制的に広げる */
     div.stButton > button {
-        /* 横幅を100%にして、最小幅をしっかり確保する */
         width: 100% !important;
         min-width: 100% !important; 
         display: block !important;
-
         height: 80px !important;
         background-color: white !important;
         color: #454444 !important;
@@ -132,13 +130,10 @@ st.markdown(f"""
         font-weight: 600 !important;
         border: 2px solid !important;
         border-image: linear-gradient(90deg, #ffeb3b, #ff9800, #f44336, #e91e63, #3f51b5) 1 !important;
-        
-        /* 削る設定は完全に消す */
         clip-path: none !important;
         border-radius: 0px !important;
     }
 
-    /* ボタンが左に寄るのを防ぐための親要素への命令 */
     div.stButton {
         width: 100% !important;
     }
