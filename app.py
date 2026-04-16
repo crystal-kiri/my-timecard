@@ -246,6 +246,29 @@ def load_members():
 
 @st.fragment
 def timecard_ui():
+    @st.cache_data(ttl=60)
+def load_members():
+    return conn.read(spreadsheet=URL, worksheet="スタッフ名簿", ttl=0)
+
+def save_to_gsheets(name, action):
+    existing_data = conn.read(spreadsheet=URL, worksheet="Sheet1")
+
+    from datetime import timezone, timedelta
+    jst = timezone(timedelta(hours=9), 'JST')
+    now_jst = datetime.now(jst)
+
+    new_entry = pd.DataFrame([{
+        "名前": name,
+        "日付": now_jst.strftime('%Y-%m-%d'),
+        "時刻": now_jst.strftime('%H:%M:%S'),
+        "区分": action
+    }])
+
+    updated_df = pd.concat([existing_data, new_entry], ignore_index=True)
+    conn.update(spreadsheet=URL, worksheet="Sheet1", data=updated_df)
+
+@st.fragment
+def timecard_ui():
     try:
         df_members = load_members()
         names = df_members["名前"].tolist()
@@ -263,52 +286,20 @@ def timecard_ui():
     selected_name = st.selectbox("USER", names, label_visibility="collapsed", key="selected_name")
     st.markdown(f'<div class="balloon-msg">{st.session_state.msg}</div>', unsafe_allow_html=True)
 
+    c1, c2 = st.columns(2)
+    with c1:
+        if st.button("出 勤", key="in"):
+            save_to_gsheets(selected_name, "出勤")
+            st.session_state.msg = f"✨ {selected_name}さん、おはよう！"
+            st.rerun()
+
+    with c2:
+        if st.button("退 勤", key="out"):
+            save_to_gsheets(selected_name, "退勤")
+            st.session_state.msg = f"🌙 {selected_name}さん、お疲れ様！"
+            st.rerun()
+
 timecard_ui()
-
-def save_to_gsheets(name, action):
-    # 1. 現在のデータを読み込む (ここでURL変数が必要)
-    existing_data = conn.read(spreadsheet=URL, worksheet="Sheet1")
-    
-    # 2. 新しい1行を作る
-    from datetime import timezone, timedelta
-    jst = timezone(timedelta(hours=9), 'JST')
-    now_jst = datetime.now(jst)
-
-    new_entry = pd.DataFrame([{
-        "名前": name,
-        "日付": now_jst.strftime('%Y-%m-%d'),
-        "時刻": now_jst.strftime('%H:%M:%S'),
-        "区分": action
-    }])
-    
-    # 3. 既存のデータと合体させる
-    updated_df = pd.concat([existing_data, new_entry], ignore_index=True)
-    
-    # 4. シート全体を最新状態で上書きする
-    conn.update(spreadsheet=URL, worksheet="Sheet1", data=updated_df)
-
-c1, c2 = st.columns(2)
-with c1:
-    if st.button("出 勤", key="in"):
-        save_to_gsheets(selected_name, "出勤")
-        st.session_state.msg = f"✨ {selected_name}さん、おはよう！"
-
-with c2:
-    if st.button("退 勤", key="out"):
-        save_to_gsheets(selected_name, "退勤")
-        st.session_state.msg = f"🌙 {selected_name}さん、お疲れ様！"
-
-# ==========================================
-# 5. 管理者ツール
-# ==========================================
-st.write("---")
-
-with st.expander("🛠 管理者メニュー"):
-    pw = st.text_input("パスワード", type="password")
-
-    if pw == "0123":
-        tab1, tab2 = st.tabs(["📊 打刻データ出力", "👥 スタッフ管理"])
-
         # =========================
         # タブ1
         # =========================
