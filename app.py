@@ -242,9 +242,6 @@ try:
 except:
     names = ["スタッフA", "スタッフB"]
 
-st.markdown(...)
-selected_name = st.selectbox("USER", names, label_visibility="collapsed")
-
 st.markdown(f'<div style="color:{disp_text}; text-align:center; letter-spacing:0.2em; font-size:22px; margin:10px 0;">TIME CARD</div>', unsafe_allow_html=True)
 selected_name = st.selectbox("USER", names, label_visibility="collapsed")
 
