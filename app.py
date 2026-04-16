@@ -228,8 +228,11 @@ selected_name = st.selectbox("USER", names, label_visibility="collapsed")
 if 'msg' not in st.session_state: st.session_state.msg = "打刻してください"
 st.markdown(f'<div class="balloon-msg">{st.session_state.msg}</div>', unsafe_allow_html=True)
 
+# --- 修正後のコード ---
 def save_to_gsheets(name, action):
-    # 1. 新しい1行だけのデータを作る
+    # ここにURLを再定義するか、secretsから直接読み込むようにします
+    target_url = st.secrets["spreadsheet"] 
+    
     new_entry = pd.DataFrame([{
         "名前": name,
         "日付": datetime.now().strftime('%Y-%m-%d'),
@@ -237,10 +240,8 @@ def save_to_gsheets(name, action):
         "区分": action
     }])
     
-    # 2. シートの末尾に「追記」する（これだけでOK！）
-    # conn.create を使うと、既存データの下に自動で追加されます
     conn.create(
-        spreadsheet=URL, 
+        spreadsheet=target_url, # ここを target_url に
         worksheet="Sheet1", 
         data=new_entry
     )
