@@ -293,8 +293,8 @@ with st.expander("🛠 管理者メニュー"):
         tab1, tab2 = st.tabs(["📊 打刻データ出力", "👥 スタッフ管理"])
 
         # --- タブ1: ログ表示と税理士提出用Excel出力 ---
-        
-        with tab1:
+
+with tab1:
     try:
         df_l = conn.read(spreadsheet=URL, ttl=0)
     except Exception as e:
@@ -303,56 +303,57 @@ with st.expander("🛠 管理者メニュー"):
 
     df_view = df_l.copy()
     df_view['日付'] = pd.to_datetime(df_view['日付'])
-                
-                c_f1, c_f2, c_f3 = st.columns(3)
-                with c_f1:
-                    # 年の選択（データにある年だけを出す）
-                    years = sorted(df_view['日付'].dt.year.unique(), reverse=True)
-                    sel_year = st.selectbox("表示年", years)
-                with c_f2:
-                    # 月の選択
-                    sel_month = st.selectbox("表示月", range(1, 13), index=datetime.now().month-1)
-                with c_f3:
-                    # 名前の選択
-                    names = ["全員"] + list(df_view['名前'].unique())
-                    sel_name = st.selectbox("スタッフ選択", names)
 
-                # フィルタリング実行
-                filtered_df = df_view[
-                    (df_view['日付'].dt.year == sel_year) & 
-                    (df_view['日付'].dt.month == sel_month)
-                ]
-                if sel_name != "全員":
-                    filtered_df = filtered_df[filtered_df['名前'] == sel_name]
+    c_f1, c_f2, c_f3 = st.columns(3)
 
-                # --- 💡 ここが見やすさのポイント ---
-                # 出勤・退勤を横並びにした「簡易勤務表」を作る
-                if not filtered_df.empty:
-                    summary_df = filtered_df.pivot_table(
-                        index=['日付', '名前'],
-                        columns='区分',
-                        values='時刻',
-                        aggfunc='last'
-                    ).reset_index()
-                    
-                    # 曜日を追加
-                    summary_df['曜日'] = summary_df['日付'].dt.day_name().map({
-                        'Monday': '月', 'Tuesday': '火', 'Wednesday': '水', 
-                        'Thursday': '木', 'Friday': '金', 'Saturday': '土', 'Sunday': '日'
-                    })
-                    
-                    # 見やすい列順に並び替え（列がない場合のエラー回避付き）
-                    cols = ['日付', '曜日', '名前']
-                    if '出勤' in summary_df.columns: cols.append('出勤')
-                    if '退勤' in summary_df.columns: cols.append('退勤')
-                    
-                    st.dataframe(summary_df[cols].sort_values(['日付', '名前'], ascending=[False, True]), use_container_width=True)
-                else:
-                    st.info("選択された条件のデータはありません。")
+    with c_f1:
+        years = sorted(df_view['日付'].dt.year.unique(), reverse=True)
+        sel_year = st.selectbox("表示年", years)
 
-                st.divider()
-                st.write("### 📄 税理士提出用ファイルの作成")
-                # --- ここから下は以前のExcel作成ロジック（target_yearなどの入力）を繋げる ---
+    with c_f2:
+        sel_month = st.selectbox("表示月", range(1, 13), index=datetime.now().month - 1)
+
+    with c_f3:
+        names = ["全員"] + list(df_view['名前'].unique())
+        sel_name = st.selectbox("スタッフ選択", names)
+
+    filtered_df = df_view[
+        (df_view['日付'].dt.year == sel_year) &
+        (df_view['日付'].dt.month == sel_month)
+    ]
+
+    if sel_name != "全員":
+        filtered_df = filtered_df[filtered_df['名前'] == sel_name]
+
+    # --- 勤務表作成 ---
+    if not filtered_df.empty:
+        summary_df = filtered_df.pivot_table(
+            index=['日付', '名前'],
+            columns='区分',
+            values='時刻',
+            aggfunc='last'
+        ).reset_index()
+
+        summary_df['曜日'] = summary_df['日付'].dt.day_name().map({
+            'Monday': '月', 'Tuesday': '火', 'Wednesday': '水',
+            'Thursday': '木', 'Friday': '金', 'Saturday': '土', 'Sunday': '日'
+        })
+
+        cols = ['日付', '曜日', '名前']
+        if '出勤' in summary_df.columns:
+            cols.append('出勤')
+        if '退勤' in summary_df.columns:
+            cols.append('退勤')
+
+        st.dataframe(
+            summary_df[cols].sort_values(['日付', '名前'], ascending=[False, True]),
+            use_container_width=True
+        )
+    else:
+        st.info("選択された条件のデータはありません。")
+
+    st.divider()
+    st.write("### 📄 税理士提出用ファイルの作成")
 
         with tab2:
             # 1. スプレッドシートからスタッフ名簿を取得
