@@ -240,15 +240,11 @@ st.components.v1.html(f"""
 # 4. 操作セクション
 # ==========================================
 
+# ① 関数たち（全部左端）
 @st.cache_data(ttl=60)
 def load_members():
     return conn.read(spreadsheet=URL, worksheet="スタッフ名簿", ttl=0)
 
-@st.fragment
-def timecard_ui():
-    @st.cache_data(ttl=60)
-def load_members():
-    return conn.read(spreadsheet=URL, worksheet="スタッフ名簿", ttl=0)
 
 def save_to_gsheets(name, action):
     existing_data = conn.read(spreadsheet=URL, worksheet="Sheet1")
@@ -266,6 +262,7 @@ def save_to_gsheets(name, action):
 
     updated_df = pd.concat([existing_data, new_entry], ignore_index=True)
     conn.update(spreadsheet=URL, worksheet="Sheet1", data=updated_df)
+
 
 @st.fragment
 def timecard_ui():
@@ -287,6 +284,7 @@ def timecard_ui():
     st.markdown(f'<div class="balloon-msg">{st.session_state.msg}</div>', unsafe_allow_html=True)
 
     c1, c2 = st.columns(2)
+
     with c1:
         if st.button("出 勤", key="in"):
             save_to_gsheets(selected_name, "出勤")
@@ -299,6 +297,8 @@ def timecard_ui():
             st.session_state.msg = f"🌙 {selected_name}さん、お疲れ様！"
             st.rerun()
 
+
+# ② 最後に呼び出す（これも左端）
 timecard_ui()
         # =========================
         # タブ1
