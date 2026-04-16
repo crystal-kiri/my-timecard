@@ -284,10 +284,6 @@ selected_name = st.selectbox("USER", names, label_visibility="collapsed")
 if 'msg' not in st.session_state:
     st.session_state.msg = "打刻してください"
 
-
-def update_salary_sheet():
-    df = conn.read(spreadsheet=URL, worksheet="Sheet1", ttl=0)
-
     if df.empty:
         return
 
@@ -328,9 +324,6 @@ def update_salary_sheet():
     out = daily_df[["名前", "日付", "出勤", "退勤", "勤務時間"]]
     out["日付"] = out["日付"].dt.strftime("%Y-%m-%d")
 
-    conn.update(spreadsheet=URL, worksheet="給与集計", data=out)
-
-
 def save_to_gsheets(name, action):
     
     now_jst = datetime.now(JST)
@@ -341,13 +334,6 @@ def save_to_gsheets(name, action):
         "時刻": now_jst.strftime('%H:%M:%S'),
         "区分": action
     }])
-
-    updated_df = pd.concat([existing_data, new_entry], ignore_index=True)
-    conn.update(spreadsheet=URL, worksheet="Sheet1", data=updated_df)
-
-    # ←これが追加ポイント（最重要）
-    update_salary_sheet()
-
 
 c1, c2 = st.columns(2)
 
