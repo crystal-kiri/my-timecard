@@ -143,6 +143,10 @@ st.markdown(f"""
     div.stButton {{
         width: 100% !important;
     }}
+    div.stElementContainer, div.stButton, div.stButton > button {{
+        width: 100% !important;
+        display: block !important;
+    }}
     </style>
     """, unsafe_allow_html=True)
 
