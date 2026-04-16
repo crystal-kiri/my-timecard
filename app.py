@@ -1,4 +1,11 @@
-import streamlit as st import pandas as pd from datetime import datetime from streamlit_gsheets import GSheetsConnection import os import io #==========================================# 1. ページ設定と時間判定 #==========================================st.set_page_config(page_title="CRYSTAL TIME CARD", layout="centered") from datetime import timedelta,
+import streamlit as st
+import pandas as pd
+from datetime import datetime
+from streamlit_gsheets import GSheetsConnection
+import os
+import io
+
+#==========================================# 1. ページ設定と時間判定 #==========================================st.set_page_config(page_title="CRYSTAL TIME CARD", layout="centered") from datetime import timedelta,
 timezone JST=timezone(timedelta(hours=+9), 'JST') now=datetime.now(JST) is_night=(now.hour >=17 or now.hour < 8) MAIN_GRAY="#454444"
 
 if is_night: bg_color="#605D86"# 深いネイビー disp_text="#FDFBF9"# 少し柔らかい白（真っ白より目に優しい） box_bg="rgba(255, 255, 255, 0.06)"
