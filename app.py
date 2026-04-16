@@ -121,19 +121,25 @@ st.markdown(f"""
     /* 3. 虹枠ボタン：横幅を強制的に広げる */
     div.stButton > button {{
         width: 100% !important;
-        min-width: 100% !important; 
-        display: block !important;
+        min-width: 100% !important;
         height: 80px !important;
-        background-color: white !important;
+        background-color: transparent !important;
         color: #454444 !important;
         font-size: 20px !important;
-        font-weight: 600 !important;
+        font-weight: 500 !important;
         border: 2px solid !important;
         border-image: linear-gradient(90deg, #ffeb3b, #ff9800, #f44336, #e91e63, #3f51b5) 1 !important;
-        clip-path: none !important;
+        
+        /* あの「角削り」デザインを復活させつつ横長に対応 */
+        clip-path: polygon(15px 0%, calc(100% - 15px) 0%, 100% 15px, 100% calc(100% - 15px), calc(100% - 15px) 100%, 15px 100%, 0% calc(100% - 15px), 0% 15px) !important;
+        
         border-radius: 0px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }}
 
+    /* ボタンの親要素も横いっぱいに広げる */
     div.stButton {{
         width: 100% !important;
     }}
