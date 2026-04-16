@@ -295,16 +295,16 @@ with st.expander("🛠 管理者メニュー"):
         # --- タブ1: ログ表示と税理士提出用Excel出力 ---
         
         with tab1:
-            try:
-            # try: の行よりも、さらに「半角スペース4つ分」右にずらす必要があります
-            df_l = conn.read(spreadsheet=URL, ttl=0)
-        except Exception as e:
-            st.error(f"Googleスプレッドシートにアクセスできません: {e}")
-            df_l = pd.DataFrame()
-                
-                # 表示用のフィルタ設定
-                df_view = df_l.copy()
-                df_view['日付'] = pd.to_datetime(df_view['日付'])
+    try:
+    # try: の行よりも、さらに「半角スペース4つ分」右にずらす必要があります
+    df_l = conn.read(spreadsheet=URL, ttl=0)
+except Exception as e:
+    st.error(f"Googleスプレッドシートにアクセスできません: {e}")
+    df_l = pd.DataFrame()
+            
+        # 表示用のフィルタ設定
+        df_view = df_l.copy()
+        df_view['日付'] = pd.to_datetime(df_view['日付'])
                 
                 c_f1, c_f2, c_f3 = st.columns(3)
                 with c_f1:
