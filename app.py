@@ -129,7 +129,7 @@ st.markdown(f"""
         min-width: 100% !important;
         height: 80px !important;
         background-color: transparent !important;
-        color: #454444 !important;
+        color: #FDFBF9 !important;
         font-size: 20px !important;
         font-weight: 500 !important;
         border: 1px solid !important;
