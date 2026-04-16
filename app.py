@@ -298,31 +298,41 @@ def save_to_gsheets(name, action):
     if df is None or df.empty:
         df = pd.DataFrame(columns=["日付", "出勤", "退勤"])
 
-    # ここで列を強制的に固定
+    # 必要列をそろえる
     for col in ["日付", "出勤", "退勤"]:
         if col not in df.columns:
             df[col] = None
 
+    # 列順固定
     df = df[["日付", "出勤", "退勤"]].copy()
-    df["日付"] = df["日付"].astype(str)
+
+    # ここが重要：文字列列として固定
+    df["日付"] = df["日付"].astype("string")
+    df["出勤"] = df["出勤"].astype("string")
+    df["退勤"] = df["退勤"].astype("string")
 
     today_rows = df[df["日付"] == today]
 
     if not today_rows.empty:
         idx = today_rows.index[-1]
         if action == "出勤":
-            df.at[idx, "出勤"] = time_str
+            df.loc[idx, "出勤"] = time_str
         else:
-            df.at[idx, "退勤"] = time_str
+            df.loc[idx, "退勤"] = time_str
     else:
         new_row = pd.DataFrame([{
             "日付": today,
             "出勤": time_str if action == "出勤" else None,
             "退勤": time_str if action == "退勤" else None
         }])
+
+        new_row["日付"] = new_row["日付"].astype("string")
+        new_row["出勤"] = new_row["出勤"].astype("string")
+        new_row["退勤"] = new_row["退勤"].astype("string")
+
         df = pd.concat([df, new_row], ignore_index=True)
 
-    # 最後にも3列だけに固定して上書き
+    # 保存前にもう一度列順固定
     out_df = df[["日付", "出勤", "退勤"]].copy()
     conn.update(spreadsheet=URL, worksheet=name, data=out_df)
 
