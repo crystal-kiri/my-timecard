@@ -285,7 +285,6 @@ if 'msg' not in st.session_state:
     st.session_state.msg = "打刻してください"
 
     if df.empty:
-        return
 
     df["日付"] = pd.to_datetime(df["日付"], errors="coerce")
     df["時刻"] = df["時刻"].astype(str)
