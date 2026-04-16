@@ -369,9 +369,7 @@ with st.expander("🛠 管理者メニュー"):
                 st.info("データがありません。")
 
         with tab2:
-            with tab2:
             # 1. スプレッドシートからスタッフ名簿を取得
-            # シート名が 'スタッフ名簿' ではない場合は適宜書き換えてください
             df_m = conn.read(spreadsheet=URL, worksheet="スタッフ名簿", ttl=0)
             curr_names = df_m['名前'].tolist()
 
@@ -416,7 +414,6 @@ with st.expander("🛠 管理者メニュー"):
                     col_yes, col_no = st.columns(2)
                     with col_yes:
                         if st.button("🔴 削除実行", key="admin_del_final"):
-                            # 名前を除外して更新
                             df_m = df_m[df_m['名前'] != target]
                             conn.update(spreadsheet=URL, worksheet="スタッフ名簿", data=df_m)
                             st.session_state.delete_confirm = False
