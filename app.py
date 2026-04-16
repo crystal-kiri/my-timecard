@@ -198,7 +198,9 @@ st.components.v1.html(f"""
         cctx.setTransform(1,0,0,1,0,0); cctx.clearRect(0,0,160,160); cctx.translate(80,80);
         cctx.font = "500 13px Arial"; cctx.fillStyle = "{clock_col}"; cctx.textAlign = "center";
         for(let n=1; n<=12; n++) cctx.fillText(n, 65*Math.sin(n*Math.PI/6), -65*Math.cos(n*Math.PI/6)+5);
-        let d = new Date(), h=d.getHours()%12, m=d.getMinutes(), s=d.getSeconds();
+        let d = new Date();
+let jst = new Date(d.toLocaleString("en-US", {timeZone: "Asia/Tokyo"}));
+let h=jst.getHours()%12, m=jst.getMinutes(), s=jst.getSeconds();
         const hand = (r,l,w,c) => {{ 
             cctx.beginPath(); cctx.lineWidth=w; cctx.lineCap="round"; cctx.strokeStyle=c; 
             cctx.moveTo(0,0); cctx.rotate(r); cctx.lineTo(0,-l); cctx.stroke(); cctx.rotate(-r); 
