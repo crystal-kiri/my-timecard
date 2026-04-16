@@ -295,13 +295,11 @@ with st.expander("🛠 管理者メニュー"):
         # --- タブ1: ログ表示と税理士提出用Excel出力 ---
         
         with tab1:
-            # 最新の全データをスプレッドシートから読み込み
             try:
             df_l = conn.read(spreadsheet=URL, ttl=0)
         except Exception as e:
             st.error(f"Googleスプレッドシートにアクセスできません: {e}")
             df_l = pd.DataFrame()
-            
             if df_l is not None and not df_l.empty:
                 st.write("### 🔍 勤務データの確認")
                 
