@@ -332,8 +332,7 @@ def update_salary_sheet():
 
 
 def save_to_gsheets(name, action):
-    existing_data = conn.read(spreadsheet=URL, worksheet="Sheet1", ttl=0)
-
+    
     now_jst = datetime.now(JST)
 
     new_entry = pd.DataFrame([{
