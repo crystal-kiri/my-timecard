@@ -18,8 +18,8 @@ MAIN_GRAY = "#454444"
 
 if is_night:
     # 🌙 ミッドナイトブルー系
-    bg_color = "#0b1020"      # 深いネイビー
-    disp_text = "#e6eaf2"     # 少し柔らかい白（真っ白より目に優しい）
+    bg_color = "#605D86"      # 深いネイビー
+    disp_text = "#FDFBF9"     # 少し柔らかい白（真っ白より目に優しい）
     box_bg = "rgba(255, 255, 255, 0.06)"
     clock_col = "#e6eaf2"
 else:
