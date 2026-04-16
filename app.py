@@ -285,8 +285,54 @@ if 'msg' not in st.session_state:
     st.session_state.msg = "打刻してください"
 
 
+def update_salary_sheet():
+    df = conn.read(spreadsheet=URL, worksheet="Sheet1", ttl=0)
+
+    if df.empty:
+        return
+
+    df["日付"] = pd.to_datetime(df["日付"], errors="coerce")
+    df["時刻"] = df["時刻"].astype(str)
+
+    daily_df = df.pivot_table(
+        index=["名前", "日付"],
+        columns="区分",
+        values="時刻",
+        aggfunc="last"
+    ).reset_index()
+
+    if "出勤" not in daily_df.columns:
+        daily_df["出勤"] = None
+    if "退勤" not in daily_df.columns:
+        daily_df["退勤"] = None
+
+    daily_df["出勤_dt"] = pd.to_datetime(
+        daily_df["日付"].dt.strftime("%Y-%m-%d") + " " + daily_df["出勤"].fillna(""),
+        errors="coerce"
+    )
+    daily_df["退勤_dt"] = pd.to_datetime(
+        daily_df["日付"].dt.strftime("%Y-%m-%d") + " " + daily_df["退勤"].fillna(""),
+        errors="coerce"
+    )
+
+    daily_df["勤務時間"] = daily_df["退勤_dt"] - daily_df["出勤_dt"]
+
+    def fmt(td):
+        if pd.isna(td): return ""
+        sec = int(td.total_seconds())
+        if sec < 0: return ""
+        return f"{sec//3600:02d}:{(sec%3600)//60:02d}"
+
+    daily_df["勤務時間"] = daily_df["勤務時間"].apply(fmt)
+
+    out = daily_df[["名前", "日付", "出勤", "退勤", "勤務時間"]]
+    out["日付"] = out["日付"].dt.strftime("%Y-%m-%d")
+
+    conn.update(spreadsheet=URL, worksheet="給与集計", data=out)
+
+
 def save_to_gsheets(name, action):
-    existing_data = conn.read(spreadsheet=URL, worksheet="Sheet1")
+    existing_data = conn.read(spreadsheet=URL, worksheet="Sheet1", ttl=0)
 
     now_jst = datetime.now(JST)
 
@@ -299,6 +345,9 @@ def save_to_gsheets(name, action):
 
     updated_df = pd.concat([existing_data, new_entry], ignore_index=True)
     conn.update(spreadsheet=URL, worksheet="Sheet1", data=updated_df)
+
+    # ←これが追加ポイント（最重要）
+    update_salary_sheet()
 
 
 c1, c2 = st.columns(2)
