@@ -336,74 +336,133 @@ with st.expander("🛠 管理者メニュー"):
         tab1, tab2 = st.tabs(["📊 打刻データ出力", "👥 スタッフ管理"])
 
         with tab1:
-            try:
-                df_l = conn.read(spreadsheet=URL, ttl=0)
-            except Exception as e:
-                st.error(f"Googleスプレッドシートにアクセスできません: {e}")
-                df_l = pd.DataFrame()
+    try:
+        df_l = conn.read(spreadsheet=URL, worksheet="Sheet1", ttl=0)
+    except Exception as e:
+        st.error(f"Googleスプレッドシートにアクセスできません: {e}")
+        df_l = pd.DataFrame()
 
-            if not df_l.empty:
-                df_view = df_l.copy()
-                df_view['日付'] = pd.to_datetime(df_view['日付'])
+    if df_l.empty:
+        st.info("打刻データがありません。")
+    else:
+        df_view = df_l.copy()
+        df_view["日付"] = pd.to_datetime(df_view["日付"], errors="coerce")
+        df_view["時刻"] = df_view["時刻"].astype(str)
 
-                c_f1, c_f2, c_f3 = st.columns(3)
+        c_f1, c_f2, c_f3 = st.columns(3)
 
-                with c_f1:
-                    years = sorted(df_view['日付'].dt.year.unique(), reverse=True)
-                    sel_year = st.selectbox("表示年", years)
+        with c_f1:
+            years = sorted(df_view["日付"].dt.year.dropna().unique(), reverse=True)
+            sel_year = st.selectbox("表示年", years)
 
-                with c_f2:
-                    sel_month = st.selectbox(
-                        "表示月",
-                        range(1, 13),
-                        index=datetime.now().month - 1
-                    )
+        with c_f2:
+            sel_month = st.selectbox(
+                "表示月",
+                range(1, 13),
+                index=datetime.now().month - 1
+            )
 
-                with c_f3:
-                    names_admin = ["全員"] + list(df_view['名前'].unique())
-                    sel_name = st.selectbox("スタッフ選択", names_admin)
+        with c_f3:
+            names_filter = ["全員"] + sorted(df_view["名前"].dropna().unique().tolist())
+            sel_name = st.selectbox("スタッフ選択", names_filter)
 
-                filtered_df = df_view[
-                    (df_view['日付'].dt.year == sel_year) &
-                    (df_view['日付'].dt.month == sel_month)
-                ]
+        filtered_df = df_view[
+            (df_view["日付"].dt.year == sel_year) &
+            (df_view["日付"].dt.month == sel_month)
+        ].copy()
 
-                if sel_name != "全員":
-                    filtered_df = filtered_df[filtered_df['名前'] == sel_name]
+        if sel_name != "全員":
+            filtered_df = filtered_df[filtered_df["名前"] == sel_name].copy()
 
-                if not filtered_df.empty:
-                    summary_df = filtered_df.pivot_table(
-                        index=['日付', '名前'],
-                        columns='区分',
-                        values='時刻',
-                        aggfunc='last'
-                    ).reset_index()
+        if filtered_df.empty:
+            st.info("選択された条件のデータはありません。")
+        else:
+            # 日ごとの出勤・退勤を作る
+            daily_df = filtered_df.pivot_table(
+                index=["名前", "日付"],
+                columns="区分",
+                values="時刻",
+                aggfunc="last"
+            ).reset_index()
 
-                    summary_df['曜日'] = summary_df['日付'].dt.day_name().map({
-                        'Monday': '月', 'Tuesday': '火', 'Wednesday': '水',
-                        'Thursday': '木', 'Friday': '金', 'Saturday': '土', 'Sunday': '日'
-                    })
+            # 曜日
+            daily_df["曜日"] = daily_df["日付"].dt.day_name().map({
+                "Monday": "月",
+                "Tuesday": "火",
+                "Wednesday": "水",
+                "Thursday": "木",
+                "Friday": "金",
+                "Saturday": "土",
+                "Sunday": "日",
+            })
 
-                    cols = ['日付', '曜日', '名前']
-                    if '出勤' in summary_df.columns:
-                        cols.append('出勤')
-                    if '退勤' in summary_df.columns:
-                        cols.append('退勤')
+            # 欠損列があっても落ちないように
+            if "出勤" not in daily_df.columns:
+                daily_df["出勤"] = None
+            if "退勤" not in daily_df.columns:
+                daily_df["退勤"] = None
 
-                    st.dataframe(
-                        summary_df[cols].sort_values(
-                            ['日付', '名前'],
-                            ascending=[False, True]
-                        ),
-                        use_container_width=True
-                    )
-                else:
-                    st.info("選択された条件のデータはありません。")
-            else:
-                st.info("データがありません。")
+            # 勤務時間計算
+            daily_df["出勤_dt"] = pd.to_datetime(
+                daily_df["日付"].dt.strftime("%Y-%m-%d") + " " + daily_df["出勤"].fillna(""),
+                errors="coerce"
+            )
+            daily_df["退勤_dt"] = pd.to_datetime(
+                daily_df["日付"].dt.strftime("%Y-%m-%d") + " " + daily_df["退勤"].fillna(""),
+                errors="coerce"
+            )
 
-            st.divider()
-            st.write("### 📄 税理士提出用ファイルの作成")
+            daily_df["勤務時間"] = daily_df["退勤_dt"] - daily_df["出勤_dt"]
+
+            # 表示用の勤務時間文字列
+            def fmt_hours(td):
+                if pd.isna(td):
+                    return ""
+                total_seconds = int(td.total_seconds())
+                if total_seconds < 0:
+                    return ""
+                hours = total_seconds // 3600
+                minutes = (total_seconds % 3600) // 60
+                return f"{hours:02d}:{minutes:02d}"
+
+            daily_df["勤務時間(hh:mm)"] = daily_df["勤務時間"].apply(fmt_hours)
+
+            # 日次明細
+            daily_display = daily_df[[
+                "名前", "日付", "曜日", "出勤", "退勤", "勤務時間(hh:mm)"
+            ]].sort_values(["名前", "日付"], ascending=[True, True])
+
+            # 月次集計
+            monthly_summary = (
+                daily_df.groupby("名前", dropna=False)
+                .agg(
+                    出勤日数=("日付", "count"),
+                    出勤打刻数=("出勤", lambda x: x.notna().sum()),
+                    退勤打刻数=("退勤", lambda x: x.notna().sum()),
+                    総勤務秒=("勤務時間", lambda x: x.dropna().dt.total_seconds().sum() if len(x.dropna()) else 0),
+                )
+                .reset_index()
+            )
+
+            monthly_summary["総勤務時間(hh:mm)"] = monthly_summary["総勤務秒"].apply(
+                lambda sec: f"{int(sec // 3600):02d}:{int((sec % 3600) // 60):02d}"
+            )
+            monthly_summary = monthly_summary.drop(columns=["総勤務秒"])
+
+            st.write("### 👥 スタッフ別 月次集計")
+            st.dataframe(
+                monthly_summary.sort_values("名前"),
+                use_container_width=True
+            )
+
+            st.write("### 📅 スタッフ別 日次明細")
+            st.dataframe(
+                daily_display,
+                use_container_width=True
+            )
+
+        st.divider()
+        st.write("### 📄 税理士提出用ファイルの作成")
 
         with tab2:
             df_m = conn.read(
