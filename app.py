@@ -10,7 +10,8 @@ clock_col="#454444"
 
 # --- Google Sheets 接続設定 --- import streamlit as st from streamlit_gsheets import GSheetsConnection secrets=dict(st.secrets["connections"]["gsheets"]) secrets["private_key"]=secrets["private_key"].replace("\\n", "\n") conn=st.connection("gsheets", type=GSheetsConnection) URL="https://docs.google.com/spreadsheets/d/1muQ7GR7RbVtOBYS3nV-xy7VCq66QqE04TqFxZo5ndtg/edit?gid=643044008#gid=643044008"
 
-#==========================================# 2. CSSデザイン (ボタン・メッセージ・全体) #==========================================st.markdown(f"""
+#==========================================# 2. CSSデザイン (ボタン・メッセージ・全体) #==========================================
+st.markdown(f"""
 <style> @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&display=swap');
 
   /* 基本背景とコンテナ */
