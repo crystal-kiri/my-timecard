@@ -69,7 +69,7 @@ st.markdown(f"""
     /* 1. 氏名選択の枠を「ころんと白く」＆「ど真ん中」 */
     div[data-baseweb="select"] > div {{
         background-color: #ffffff !important;
-        color: {disp_text} !important;
+        color: #371637 !important;
         height: 64px !important;                   /* 高さを少し微調整 */
         border-radius: 20px !important;
         border: none !important;
