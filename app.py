@@ -244,10 +244,14 @@ def save_to_gsheets(name, action):
     existing_data = conn.read(spreadsheet=URL, worksheet="Sheet1")
     
     # 2. 新しい1行を作る
+    from datetime import timezone, timedelta
+    jst = timezone(timedelta(hours=9), 'JST')
+    now_jst = datetime.now(jst)
+
     new_entry = pd.DataFrame([{
         "名前": name,
-        "日付": datetime.now().strftime('%Y-%m-%d'),
-        "時刻": datetime.now().strftime('%H:%M:%S'),
+        "日付": now_jst.strftime('%Y-%m-%d'),
+        "時刻": now_jst.strftime('%H:%M:%S'),
         "区分": action
     }])
     
