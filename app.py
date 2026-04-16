@@ -21,6 +21,10 @@ else:
     bg_color, disp_text = "#ffffff", MAIN_GRAY
     box_bg, clock_col = "#f9f9f9", MAIN_GRAY
 
+# --- Google Sheets 接続設定 ---
+conn = st.connection("gsheets", type=GSheetsConnection)
+URL = st.secrets["spreadsheet"]
+
 # ==========================================
 # 2. CSSデザイン (ボタン・メッセージ・全体)
 # ==========================================
@@ -206,32 +210,42 @@ st.components.v1.html(f"""
 # ==========================================
 # 4. 操作セクション
 # ==========================================
-USER_FILE, LOG_FILE = 'members.csv', 'attendance_v2.csv'
-if not os.path.exists(USER_FILE): pd.DataFrame(['スタッフA', 'スタッフB'], columns=['名前']).to_csv(USER_FILE, index=False, encoding="utf_8_sig")
-df_members = pd.read_csv(USER_FILE)
-names = df_members['名前'].tolist()
+try:
+    df_members = conn.read(spreadsheet=URL, worksheet="Sheet2") # Sheet2に名前リストがある想定
+    names = df_members['名前'].tolist()
+except:
+    names = ["スタッフA", "スタッフB"] # 失敗時の予備
 
 st.markdown(f'<div style="color:{disp_text}; text-align:center; letter-spacing:0.2em; font-size:22px; margin:10px 0;">TIME CARD</div>', unsafe_allow_html=True)
 selected_name = st.selectbox("USER", names, label_visibility="collapsed")
 
-# 状態管理
-if 'msg' not in st.session_state:
-    st.session_state.msg = "打刻してください"
-
+if 'msg' not in st.session_state: st.session_state.msg = "打刻してください"
 st.markdown(f'<div class="balloon-msg">{st.session_state.msg}</div>', unsafe_allow_html=True)
+
+# 打刻関数
+def save_to_gsheets(name, action):
+    # 現在のデータを取得
+    existing_data = conn.read(spreadsheet=URL, worksheet="Sheet1")
+    new_entry = pd.DataFrame([{
+        "名前": name,
+        "日付": datetime.now().strftime('%Y-%m-%d'),
+        "時刻": datetime.now().strftime('%H:%M:%S'),
+        "区分": action
+    }])
+    # 合体させて保存
+    updated_df = pd.concat([existing_data, new_entry], ignore_index=True)
+    conn.update(spreadsheet=URL, worksheet="Sheet1", data=updated_df)
 
 c1, c2 = st.columns(2)
 with c1:
     if st.button("出 勤", key="in"):
-        now_dt = datetime.now()
-        pd.DataFrame([[selected_name, now_dt.strftime('%Y-%m-%d'), now_dt.strftime('%H:%M:%S'), "出勤"]], columns=['名前', '日付', '時刻', '区分']).to_csv(LOG_FILE, mode='a', header=not os.path.exists(LOG_FILE), index=False, encoding="utf_8_sig")
+        save_to_gsheets(selected_name, "出勤")
         st.session_state.msg = f"✨ {selected_name}さん、おはよう！"
         st.rerun()
 
 with c2:
     if st.button("退 勤", key="out"):
-        now_dt = datetime.now()
-        pd.DataFrame([[selected_name, now_dt.strftime('%Y-%m-%d'), now_dt.strftime('%H:%M:%S'), "退勤"]], columns=['名前', '日付', '時刻', '区分']).to_csv(LOG_FILE, mode='a', header=not os.path.exists(LOG_FILE), index=False, encoding="utf_8_sig")
+        save_to_gsheets(selected_name, "退勤")
         st.session_state.msg = f"🌙 {selected_name}さん、お疲れ様！"
         st.rerun()
 
