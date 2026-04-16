@@ -284,37 +284,28 @@ selected_name = st.selectbox("USER", names, label_visibility="collapsed")
 if 'msg' not in st.session_state:
     st.session_state.msg = "打刻してください"
 
-st.markdown(f'<div class="balloon-msg">{st.session_state.msg}</div>', unsafe_allow_html=True)
-
-def save_to_gsheets(name, action):
-    existing_data = conn.read(spreadsheet=URL, worksheet="Sheet1")
-
-    now_jst = datetime.now(JST)
-
-    new_entry = pd.DataFrame([{
-        "名前": name,
-        "日付": now_jst.strftime('%Y-%m-%d'),
-        "時刻": now_jst.strftime('%H:%M:%S'),
-        "区分": action
-    }])
-
-    updated_df = pd.concat([existing_data, new_entry], ignore_index=True)
-    conn.update(spreadsheet=URL, worksheet="Sheet1", data=updated_df)
-
 c1, c2 = st.columns(2)
+
+clicked_action = None
+clicked_msg = None
 
 with c1:
     if st.button("出 勤", key="in"):
-        st.session_state.msg = f"⏳ {selected_name}さん、記録しています..."
-        save_to_gsheets(selected_name, "出勤")
-        st.session_state.msg = f"✨ {selected_name}さん、おはよう！"
+        clicked_action = "出勤"
+        clicked_msg = f"✨ {selected_name}さん、おはよう！"
 
 with c2:
     if st.button("退 勤", key="out"):
-        st.session_state.msg = f"⏳ {selected_name}さん、記録しています..."
-        save_to_gsheets(selected_name, "退勤")
-        st.session_state.msg = f"🌙 {selected_name}さん、お疲れ様！"
+        clicked_action = "退勤"
+        clicked_msg = f"🌙 {selected_name}さん、お疲れ様！"
 
+if clicked_msg is not None:
+    st.session_state.msg = clicked_msg
+
+st.markdown(f'<div class="balloon-msg">{st.session_state.msg}</div>', unsafe_allow_html=True)
+
+if clicked_action is not None:
+    save_to_gsheets(selected_name, clicked_action)
 # ==========================================
 # 5. 管理者ツール
 # ==========================================
