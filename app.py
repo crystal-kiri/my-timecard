@@ -118,26 +118,30 @@ st.markdown(f"""
 
     @keyframes fadeIn {{ from {{ opacity: 0; transform: translateY(5px); }} to {{ opacity: 1; transform: translateY(0); }} }}
 
-    /* 3. 虹枠ボタン */
-    div.stButton > button {{
+    /* 3. 虹枠ボタン：横幅を強制的に広げる */
+    div.stButton > button {
+        /* 横幅を100%にして、最小幅をしっかり確保する */
         width: 100% !important;
+        min-width: 100% !important; 
+        display: block !important;
+
         height: 80px !important;
-        background-color: transparent !important;
-        color: {disp_text} !important;
+        background-color: white !important;
+        color: #454444 !important;
         font-size: 20px !important;
-        font-weight: 500 !important;
-        border: 1px solid !important;
+        font-weight: 600 !important;
+        border: 2px solid !important;
         border-image: linear-gradient(90deg, #ffeb3b, #ff9800, #f44336, #e91e63, #3f51b5) 1 !important;
-        clip-path: polygon(15px 0%, calc(100% - 15px) 0%, 100% 15px, 100% calc(100% - 15px), calc(100% - 15px) 100%, 15px 100%, 0% calc(100% - 15px), 0% 15px) !important;
+        
+        /* 削る設定は完全に消す */
+        clip-path: none !important;
         border-radius: 0px !important;
-        transition: 0.2s;
-    }}
-    
-    div.stButton > button:hover {{ 
-        background-color: rgba(128,128,128,0.05) !important; 
-        transform: scale(1.02); 
-    }}
-    div.stButton > button:active {{ transform: scale(0.95); }}
+    }
+
+    /* ボタンが左に寄るのを防ぐための親要素への命令 */
+    div.stButton {
+        width: 100% !important;
+    }
     </style>
     """, unsafe_allow_html=True)
 
