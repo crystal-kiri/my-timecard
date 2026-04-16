@@ -17,11 +17,16 @@ is_night = (now.hour >= 17 or now.hour < 8)
 MAIN_GRAY = "#454444"
 
 if is_night:
-    bg_color, disp_text = "#0a0a0a", "#ffffff"
-    box_bg, clock_col = "rgba(255, 255, 255, 0.08)", "#ffffff"
+    # 🌙 ミッドナイトブルー系
+    bg_color = "#0b1020"      # 深いネイビー
+    disp_text = "#e6eaf2"     # 少し柔らかい白（真っ白より目に優しい）
+    box_bg = "rgba(255, 255, 255, 0.06)"
+    clock_col = "#e6eaf2"
 else:
-    bg_color, disp_text = "#ffffff", MAIN_GRAY
-    box_bg, clock_col = "#f9f9f9", MAIN_GRAY
+    bg_color = "#ffffff"
+    disp_text = "#454444"
+    box_bg = "#f9f9f9"
+    clock_col = "#454444"
 
 # --- Google Sheets 接続設定 ---
 import streamlit as st
