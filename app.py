@@ -297,7 +297,6 @@ with st.expander("🛠 管理者メニュー"):
         with tab1:
             # 最新の全データをスプレッドシートから読み込み
             try:
-        try:
             df_l = conn.read(spreadsheet=URL, ttl=0)
         except Exception as e:
             st.error(f"Googleスプレッドシートにアクセスできません: {e}")
