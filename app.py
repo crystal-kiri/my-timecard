@@ -284,6 +284,23 @@ selected_name = st.selectbox("USER", names, label_visibility="collapsed")
 if 'msg' not in st.session_state:
     st.session_state.msg = "打刻してください"
 
+
+def save_to_gsheets(name, action):
+    existing_data = conn.read(spreadsheet=URL, worksheet="Sheet1")
+
+    now_jst = datetime.now(JST)
+
+    new_entry = pd.DataFrame([{
+        "名前": name,
+        "日付": now_jst.strftime('%Y-%m-%d'),
+        "時刻": now_jst.strftime('%H:%M:%S'),
+        "区分": action
+    }])
+
+    updated_df = pd.concat([existing_data, new_entry], ignore_index=True)
+    conn.update(spreadsheet=URL, worksheet="Sheet1", data=updated_df)
+
+
 c1, c2 = st.columns(2)
 
 clicked_action = None
@@ -306,6 +323,7 @@ st.markdown(f'<div class="balloon-msg">{st.session_state.msg}</div>', unsafe_all
 
 if clicked_action is not None:
     save_to_gsheets(selected_name, clicked_action)
+
 # ==========================================
 # 5. 管理者ツール
 # ==========================================
