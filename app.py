@@ -29,7 +29,7 @@ secrets = dict(st.secrets["connections"]["gsheets"])
 secrets["private_key"] = secrets["private_key"].replace("\\n", "\n")
 
 conn = st.connection("gsheets", type=GSheetsConnection)
-URL = st.secrets["spreadsheet"]
+URL = "https://docs.google.com/spreadsheets/d/1muQ7GR7RbVtOBYS3nV-xy7VCq66QqE04TqFxZo5ndtg/edit?gid=643044008#gid=643044008"
 
 # ==========================================
 # 2. CSSデザイン (ボタン・メッセージ・全体)
