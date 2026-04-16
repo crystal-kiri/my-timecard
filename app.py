@@ -369,15 +369,22 @@ with st.expander("🛠 管理者メニュー"):
                 st.info("データがありません。")
 
         with tab2:
-            df_m = pd.read_csv(USER_FILE)
+            with tab2:
+            # 1. スプレッドシートからスタッフ名簿を取得
+            # シート名が 'スタッフ名簿' ではない場合は適宜書き換えてください
+            df_m = conn.read(spreadsheet=URL, worksheet="スタッフ名簿", ttl=0)
             curr_names = df_m['名前'].tolist()
 
             st.markdown("### スタッフの追加")
             new_n = st.text_input("新しい名前を入力", key="new_staff_input")
             if st.button("新規登録", key="admin_add"):
                 if new_n and new_n not in curr_names:
-                    new_df = pd.concat([df_m, pd.DataFrame([{'名前': new_n}])], ignore_index=True)
-                    new_df.to_csv(USER_FILE, index=False, encoding="utf_8_sig")
+                    # 新しいスタッフを追加したデータフレームを作成
+                    new_staff_df = pd.DataFrame([{'名前': new_n}])
+                    updated_df = pd.concat([df_m, new_staff_df], ignore_index=True)
+                    
+                    # スプレッドシートを更新
+                    conn.update(spreadsheet=URL, worksheet="スタッフ名簿", data=updated_df)
                     st.success(f"{new_n}さんを登録しました")
                     st.rerun()
 
@@ -387,17 +394,16 @@ with st.expander("🛠 管理者メニュー"):
             target = st.selectbox("対象のスタッフを選択", curr_names)
             renamed = st.text_input("名前を修正する", value=target)
             
-            # --- ボタンを横に並べる ---
             c1, c2 = st.columns(2)
             with c1:
                 if st.button("上書き保存", key="admin_save"):
+                    # 名前を修正
                     df_m.loc[df_m['名前'] == target, '名前'] = renamed
-                    df_m.to_csv(USER_FILE, index=False, encoding="utf_8_sig")
+                    conn.update(spreadsheet=URL, worksheet="スタッフ名簿", data=df_m)
                     st.success("修正しました")
                     st.rerun()
             
             with c2:
-                # 削除の2段階ガード
                 if "delete_confirm" not in st.session_state:
                     st.session_state.delete_confirm = False
 
@@ -406,13 +412,13 @@ with st.expander("🛠 管理者メニュー"):
                         st.session_state.delete_confirm = True
                         st.rerun()
                 else:
-                    # 1回押すとこっちに切り替わる
                     st.warning(f"【確認】本当に {target} さんを消しますか？")
                     col_yes, col_no = st.columns(2)
                     with col_yes:
                         if st.button("🔴 削除実行", key="admin_del_final"):
+                            # 名前を除外して更新
                             df_m = df_m[df_m['名前'] != target]
-                            df_m.to_csv(USER_FILE, index=False, encoding="utf_8_sig")
+                            conn.update(spreadsheet=URL, worksheet="スタッフ名簿", data=df_m)
                             st.session_state.delete_confirm = False
                             st.rerun()
                     with col_no:
