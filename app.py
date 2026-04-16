@@ -285,15 +285,30 @@ if 'msg' not in st.session_state:
     st.session_state.msg = "打刻してください"
 
 def save_to_gsheets(name, action):
-    
     now_jst = datetime.now(JST)
 
+    try:
+        personal_data = conn.read(spreadsheet=URL, worksheet=name, ttl=0)
+    except Exception as e:
+        st.error(f"{name} のシートが見つかりません: {e}")
+        return
+
     new_entry = pd.DataFrame([{
-        "名前": name,
         "日付": now_jst.strftime('%Y-%m-%d'),
         "時刻": now_jst.strftime('%H:%M:%S'),
         "区分": action
     }])
+
+    if personal_data is None or personal_data.empty:
+        updated_df = new_entry
+    else:
+        updated_df = pd.concat([personal_data, new_entry], ignore_index=True)
+
+    try:
+        conn.update(spreadsheet=URL, worksheet=name, data=updated_df)
+        st.success(f"{name} シートに保存しました")
+    except Exception as e:
+        st.error(f"{name} シートへの保存に失敗しました: {e}")
 
 c1, c2 = st.columns(2)
 
