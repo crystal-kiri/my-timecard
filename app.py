@@ -28,7 +28,7 @@ from streamlit_gsheets import GSheetsConnection
 secrets = dict(st.secrets["connections"]["gsheets"])
 secrets["private_key"] = secrets["private_key"].replace("\\n", "\n")
 
-conn = GSheetsConnection(secrets)
+conn = st.connection("gsheets", type=GSheetsConnection)
 URL = st.secrets["spreadsheet"]
 
 # ==========================================
