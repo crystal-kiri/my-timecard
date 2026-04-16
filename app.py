@@ -22,7 +22,13 @@ else:
     box_bg, clock_col = "#f9f9f9", MAIN_GRAY
 
 # --- Google Sheets 接続設定 ---
-conn = st.connection("gsheets", type=GSheetsConnection)
+import streamlit as st
+from streamlit_gsheets import GSheetsConnection
+
+secrets = dict(st.secrets["connections"]["gsheets"])
+secrets["private_key"] = secrets["private_key"].replace("\\n", "\n")
+
+conn = GSheetsConnection(secrets)
 URL = st.secrets["spreadsheet"]
 
 # ==========================================
