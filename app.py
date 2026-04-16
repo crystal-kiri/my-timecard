@@ -284,45 +284,6 @@ selected_name = st.selectbox("USER", names, label_visibility="collapsed")
 if 'msg' not in st.session_state:
     st.session_state.msg = "打刻してください"
 
-    if df.empty:
-
-    df["日付"] = pd.to_datetime(df["日付"], errors="coerce")
-    df["時刻"] = df["時刻"].astype(str)
-
-    daily_df = df.pivot_table(
-        index=["名前", "日付"],
-        columns="区分",
-        values="時刻",
-        aggfunc="last"
-    ).reset_index()
-
-    if "出勤" not in daily_df.columns:
-        daily_df["出勤"] = None
-    if "退勤" not in daily_df.columns:
-        daily_df["退勤"] = None
-
-    daily_df["出勤_dt"] = pd.to_datetime(
-        daily_df["日付"].dt.strftime("%Y-%m-%d") + " " + daily_df["出勤"].fillna(""),
-        errors="coerce"
-    )
-    daily_df["退勤_dt"] = pd.to_datetime(
-        daily_df["日付"].dt.strftime("%Y-%m-%d") + " " + daily_df["退勤"].fillna(""),
-        errors="coerce"
-    )
-
-    daily_df["勤務時間"] = daily_df["退勤_dt"] - daily_df["出勤_dt"]
-
-    def fmt(td):
-        if pd.isna(td): return ""
-        sec = int(td.total_seconds())
-        if sec < 0: return ""
-        return f"{sec//3600:02d}:{(sec%3600)//60:02d}"
-
-    daily_df["勤務時間"] = daily_df["勤務時間"].apply(fmt)
-
-    out = daily_df[["名前", "日付", "出勤", "退勤", "勤務時間"]]
-    out["日付"] = out["日付"].dt.strftime("%Y-%m-%d")
-
 def save_to_gsheets(name, action):
     
     now_jst = datetime.now(JST)
