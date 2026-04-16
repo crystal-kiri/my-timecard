@@ -281,13 +281,11 @@ with c1:
     if st.button("出 勤", key="in"):
         save_to_gsheets(selected_name, "出勤")
         st.session_state.msg = f"✨ {selected_name}さん、おはよう！"
-        st.rerun()
 
 with c2:
     if st.button("退 勤", key="out"):
         save_to_gsheets(selected_name, "退勤")
         st.session_state.msg = f"🌙 {selected_name}さん、お疲れ様！"
-        st.rerun()
 
 # ==========================================
 # 5. 管理者ツール
