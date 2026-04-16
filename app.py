@@ -240,21 +240,31 @@ st.components.v1.html(f"""
 # 4. 操作セクション
 # ==========================================
 
-# ▼ここで毎回取得
-try:
-    df_members = conn.read(spreadsheet=URL, worksheet="スタッフ名簿", ttl=0)
-    names = df_members['名前'].tolist()
-except:
-    names = ["スタッフA", "スタッフB"]
+@st.cache_data(ttl=60)
+def load_members():
+    return conn.read(spreadsheet=URL, worksheet="スタッフ名簿", ttl=0)
 
-st.markdown(f'<div style="color:{disp_text}; text-align:center; letter-spacing:0.2em; font-size:22px; margin:10px 0;">TIME CARD</div>', unsafe_allow_html=True)
-selected_name = st.selectbox("USER", names, label_visibility="collapsed")
+@st.fragment
+def timecard_ui():
+    try:
+        df_members = load_members()
+        names = df_members["名前"].tolist()
+    except:
+        names = ["スタッフA", "スタッフB"]
 
-if 'msg' not in st.session_state: st.session_state.msg = "打刻してください"
-st.markdown(f'<div class="balloon-msg">{st.session_state.msg}</div>', unsafe_allow_html=True)
+    st.markdown(
+        f'<div style="color:{disp_text}; text-align:center; letter-spacing:0.2em; font-size:22px; margin:10px 0;">TIME CARD</div>',
+        unsafe_allow_html=True
+    )
 
-# --- 修正後のコード ---
-# 打刻関数
+    if 'msg' not in st.session_state:
+        st.session_state.msg = "打刻してください"
+
+    selected_name = st.selectbox("USER", names, label_visibility="collapsed", key="selected_name")
+    st.markdown(f'<div class="balloon-msg">{st.session_state.msg}</div>', unsafe_allow_html=True)
+
+timecard_ui()
+
 def save_to_gsheets(name, action):
     # 1. 現在のデータを読み込む (ここでURL変数が必要)
     existing_data = conn.read(spreadsheet=URL, worksheet="Sheet1")
@@ -393,6 +403,7 @@ with st.expander("🛠 管理者メニュー"):
                         worksheet="スタッフ名簿",
                         data=updated_df
                     )
+                    load_members.clear()
 
                     st.success(f"{new_n}さんを登録しました")
                     st.rerun()
