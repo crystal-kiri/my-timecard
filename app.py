@@ -152,14 +152,13 @@ st.markdown(f"""
         display: block !important;
     }}
     /* 右上や画面上に出る Streamlit の実行ステータスを隠す */
-[data-testid="stStatusWidget"] {
-    display: none !important;
-}
+[data-testid="stStatusWidget"] {{
+        display: none !important;
+    }}
 
-/* 上部のデコレーション類も必要なら隠す */
-[data-testid="stDecoration"] {
-    display: none !important;
-}
+    [data-testid="stDecoration"] {{
+        display: none !important;
+    }}
     </style>
     """, unsafe_allow_html=True)
 
