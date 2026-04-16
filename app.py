@@ -302,13 +302,16 @@ def save_to_gsheets(name, action):
     conn.update(spreadsheet=URL, worksheet="Sheet1", data=updated_df)
 
 c1, c2 = st.columns(2)
+
 with c1:
     if st.button("出 勤", key="in"):
+        st.session_state.msg = f"⏳ {selected_name}さん、記録しています..."
         save_to_gsheets(selected_name, "出勤")
         st.session_state.msg = f"✨ {selected_name}さん、おはよう！"
 
 with c2:
     if st.button("退 勤", key="out"):
+        st.session_state.msg = f"⏳ {selected_name}さん、記録しています..."
         save_to_gsheets(selected_name, "退勤")
         st.session_state.msg = f"🌙 {selected_name}さん、お疲れ様！"
 
