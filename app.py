@@ -235,12 +235,10 @@ st.components.v1.html(f"""
 # 4. 操作セクション
 # ==========================================
 try:
-    # ttl=0 を入れることで、常に最新のスプレッドシートを読みに行きます
-    df_members = conn.read(spreadsheet=URL, worksheet="スタッフ名簿", ttl=0)
-    names = df_members['名前'].tolist()
-except Exception as e:
-    # 初回起動時やシートがない場合のための予備
-    names = ["スタッフA", "スタッフB"]
+#     df_members = conn.read(spreadsheet=URL, worksheet="Sheet2") 
+#     names = df_members['名前'].tolist()
+# except:
+#     names = ["スタッフA", "スタッフB"]
 
 st.markdown(f'<div style="color:{disp_text}; text-align:center; letter-spacing:0.2em; font-size:22px; margin:10px 0;">TIME CARD</div>', unsafe_allow_html=True)
 selected_name = st.selectbox("USER", names, label_visibility="collapsed")
