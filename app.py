@@ -158,7 +158,7 @@ st.markdown(f"""
 # ==========================================
 # 3. 時計＆星セクション (マウスオーバー復活)
 # ==========================================
-st.components.v1.html(f"""
+# st.components.v1.html(f"""
     <div id="container" style="width: 100%; height: 180px; position: relative; overflow: hidden; border-radius:20px; cursor: crosshair;">
         <canvas id="bg" style="position: absolute; top:0; left:0; width:100%; height:100%; z-index:1;"></canvas>
         <canvas id="clk" width="160" height="160" style="position: relative; z-index:2; margin: 0 auto; display: block; pointer-events: none;"></canvas>
