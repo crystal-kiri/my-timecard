@@ -287,89 +287,108 @@ with c2:
 # 5. 管理者ツール
 # ==========================================
 st.write("---")
+
 with st.expander("🛠 管理者メニュー"):
     pw = st.text_input("パスワード", type="password")
+
     if pw == "0123":
         tab1, tab2 = st.tabs(["📊 打刻データ出力", "👥 スタッフ管理"])
 
-        # --- タブ1: ログ表示と税理士提出用Excel出力 ---
+        # =========================
+        # タブ1
+        # =========================
+        with tab1:
+            try:
+                df_l = conn.read(spreadsheet=URL, ttl=0)
+            except Exception as e:
+                st.error(f"Googleスプレッドシートにアクセスできません: {e}")
+                df_l = pd.DataFrame()
 
-with tab1:
-    try:
-        df_l = conn.read(spreadsheet=URL, ttl=0)
-    except Exception as e:
-        st.error(f"Googleスプレッドシートにアクセスできません: {e}")
-        df_l = pd.DataFrame()
+            df_view = df_l.copy()
+            df_view['日付'] = pd.to_datetime(df_view['日付'])
 
-    df_view = df_l.copy()
-    df_view['日付'] = pd.to_datetime(df_view['日付'])
+            c_f1, c_f2, c_f3 = st.columns(3)
 
-    c_f1, c_f2, c_f3 = st.columns(3)
+            with c_f1:
+                years = sorted(df_view['日付'].dt.year.unique(), reverse=True)
+                sel_year = st.selectbox("表示年", years)
 
-    with c_f1:
-        years = sorted(df_view['日付'].dt.year.unique(), reverse=True)
-        sel_year = st.selectbox("表示年", years)
+            with c_f2:
+                sel_month = st.selectbox(
+                    "表示月",
+                    range(1, 13),
+                    index=datetime.now().month - 1
+                )
 
-    with c_f2:
-        sel_month = st.selectbox("表示月", range(1, 13), index=datetime.now().month - 1)
+            with c_f3:
+                names = ["全員"] + list(df_view['名前'].unique())
+                sel_name = st.selectbox("スタッフ選択", names)
 
-    with c_f3:
-        names = ["全員"] + list(df_view['名前'].unique())
-        sel_name = st.selectbox("スタッフ選択", names)
+            filtered_df = df_view[
+                (df_view['日付'].dt.year == sel_year) &
+                (df_view['日付'].dt.month == sel_month)
+            ]
 
-    filtered_df = df_view[
-        (df_view['日付'].dt.year == sel_year) &
-        (df_view['日付'].dt.month == sel_month)
-    ]
+            if sel_name != "全員":
+                filtered_df = filtered_df[filtered_df['名前'] == sel_name]
 
-    if sel_name != "全員":
-        filtered_df = filtered_df[filtered_df['名前'] == sel_name]
+            if not filtered_df.empty:
+                summary_df = filtered_df.pivot_table(
+                    index=['日付', '名前'],
+                    columns='区分',
+                    values='時刻',
+                    aggfunc='last'
+                ).reset_index()
 
-    # --- 勤務表作成 ---
-    if not filtered_df.empty:
-        summary_df = filtered_df.pivot_table(
-            index=['日付', '名前'],
-            columns='区分',
-            values='時刻',
-            aggfunc='last'
-        ).reset_index()
+                summary_df['曜日'] = summary_df['日付'].dt.day_name().map({
+                    'Monday': '月', 'Tuesday': '火', 'Wednesday': '水',
+                    'Thursday': '木', 'Friday': '金', 'Saturday': '土', 'Sunday': '日'
+                })
 
-        summary_df['曜日'] = summary_df['日付'].dt.day_name().map({
-            'Monday': '月', 'Tuesday': '火', 'Wednesday': '水',
-            'Thursday': '木', 'Friday': '金', 'Saturday': '土', 'Sunday': '日'
-        })
+                cols = ['日付', '曜日', '名前']
+                if '出勤' in summary_df.columns:
+                    cols.append('出勤')
+                if '退勤' in summary_df.columns:
+                    cols.append('退勤')
 
-        cols = ['日付', '曜日', '名前']
-        if '出勤' in summary_df.columns:
-            cols.append('出勤')
-        if '退勤' in summary_df.columns:
-            cols.append('退勤')
+                st.dataframe(
+                    summary_df[cols].sort_values(
+                        ['日付', '名前'],
+                        ascending=[False, True]
+                    ),
+                    use_container_width=True
+                )
+            else:
+                st.info("選択された条件のデータはありません。")
 
-        st.dataframe(
-            summary_df[cols].sort_values(['日付', '名前'], ascending=[False, True]),
-            use_container_width=True
-        )
-    else:
-        st.info("選択された条件のデータはありません。")
+            st.divider()
+            st.write("### 📄 税理士提出用ファイルの作成")
 
-    st.divider()
-    st.write("### 📄 税理士提出用ファイルの作成")
-
+        # =========================
+        # タブ2
+        # =========================
         with tab2:
-            # 1. スプレッドシートからスタッフ名簿を取得
-            df_m = conn.read(spreadsheet=URL, worksheet="スタッフ名簿", ttl=0)
+            df_m = conn.read(
+                spreadsheet=URL,
+                worksheet="スタッフ名簿",
+                ttl=0
+            )
             curr_names = df_m['名前'].tolist()
 
             st.markdown("### スタッフの追加")
             new_n = st.text_input("新しい名前を入力", key="new_staff_input")
+
             if st.button("新規登録", key="admin_add"):
                 if new_n and new_n not in curr_names:
-                    # 新しいスタッフを追加したデータフレームを作成
                     new_staff_df = pd.DataFrame([{'名前': new_n}])
                     updated_df = pd.concat([df_m, new_staff_df], ignore_index=True)
-                    
-                    # スプレッドシートを更新
-                    conn.update(spreadsheet=URL, worksheet="スタッフ名簿", data=updated_df)
+
+                    conn.update(
+                        spreadsheet=URL,
+                        worksheet="スタッフ名簿",
+                        data=updated_df
+                    )
+
                     st.success(f"{new_n}さんを登録しました")
                     st.rerun()
 
@@ -378,16 +397,20 @@ with tab1:
             st.markdown("### 登録内容の変更・削除")
             target = st.selectbox("対象のスタッフを選択", curr_names)
             renamed = st.text_input("名前を修正する", value=target)
-            
+
             c1, c2 = st.columns(2)
+
             with c1:
                 if st.button("上書き保存", key="admin_save"):
-                    # 名前を修正
                     df_m.loc[df_m['名前'] == target, '名前'] = renamed
-                    conn.update(spreadsheet=URL, worksheet="スタッフ名簿", data=df_m)
+                    conn.update(
+                        spreadsheet=URL,
+                        worksheet="スタッフ名簿",
+                        data=df_m
+                    )
                     st.success("修正しました")
                     st.rerun()
-            
+
             with c2:
                 if "delete_confirm" not in st.session_state:
                     st.session_state.delete_confirm = False
@@ -398,42 +421,46 @@ with tab1:
                         st.rerun()
                 else:
                     st.warning(f"【確認】本当に {target} さんを消しますか？")
+
                     col_yes, col_no = st.columns(2)
+
                     with col_yes:
                         if st.button("🔴 削除実行", key="admin_del_final"):
                             df_m = df_m[df_m['名前'] != target]
-                            conn.update(spreadsheet=URL, worksheet="スタッフ名簿", data=df_m)
+                            conn.update(
+                                spreadsheet=URL,
+                                worksheet="スタッフ名簿",
+                                data=df_m
+                            )
                             st.session_state.delete_confirm = False
                             st.rerun()
+
                     with col_no:
                         if st.button("キャンセル", key="admin_del_cancel"):
                             st.session_state.delete_confirm = False
                             st.rerun()
 
-    # 管理画面のボタンも「虹枠」にするためのCSS（微調整版）
-    # 管理画面のボタンデザインを整えつつ、パスワード欄などのシステムボタンは除外する
+    # CSS
     st.markdown("""
-        <style>
-        /* 管理画面内の「操作用ボタン」だけに限定して虹枠を適用 */
-        div[data-testid="stExpander"] button[kind="secondary"],
-        div[data-testid="stExpander"] button[kind="primary"] {
-            width: 100% !important;
-            height: 50px !important;
-            background-color: transparent !important;
-            font-size: 16_px !important;
-            border: 1px solid !important;
-            border-image: linear-gradient(90deg, #ffeb3b, #ff9800, #f44336, #e91e63, #3f51b5) 1 !important;
-            clip-path: polygon(10px 0%, calc(100% - 10px) 0%, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0% calc(100% - 10px), 0% 10px) !important;
-            margin-top: 10px !important;
-        }
+    <style>
+    div[data-testid="stExpander"] button[kind="secondary"],
+    div[data-testid="stExpander"] button[kind="primary"] {
+        width: 100% !important;
+        height: 50px !important;
+        background-color: transparent !important;
+        font-size: 16px !important;
+        border: 1px solid !important;
+        border-image: linear-gradient(90deg, #ffeb3b, #ff9800, #f44336, #e91e63, #3f51b5) 1 !important;
+        clip-path: polygon(10px 0%, calc(100% - 10px) 0%, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0% calc(100% - 10px), 0% 10px) !important;
+        margin-top: 10px !important;
+    }
 
-        /* パスワード欄の中の「目」のアイコンボタンなどは虹枠にしない（リセット） */
-        div[data-testid="stExpander"] div[data-baseweb="input"] button {
-            clip-path: none !important;
-            border: none !important;
-            border-image: none !important;
-            height: auto !important;
-            width: auto !important;
-        }
-        </style>
+    div[data-testid="stExpander"] div[data-baseweb="input"] button {
+        clip-path: none !important;
+        border: none !important;
+        border-image: none !important;
+        height: auto !important;
+        width: auto !important;
+    }
+    </style>
     """, unsafe_allow_html=True)
