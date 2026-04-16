@@ -335,11 +335,6 @@ with st.expander("🛠 管理者メニュー"):
     if pw == "0123":
         tab1, tab2 = st.tabs(["📊 打刻データ出力", "👥 スタッフ管理"])
 
-        File "/mount/src/my-timecard/app.py", line 339
-      try:
-     ^
-IndentationError: expected an indented block after 'with' statement on line 338
-
         st.divider()
         st.write("### 📄 税理士提出用ファイルの作成")
 
