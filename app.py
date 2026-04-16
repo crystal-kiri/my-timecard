@@ -301,7 +301,7 @@ def save_to_gsheets(name, action):
     # ここで列を強制的に固定
     for col in ["日付", "出勤", "退勤"]:
         if col not in df.columns:
-            df[col] = ""
+            df[col] = None
 
     df = df[["日付", "出勤", "退勤"]].copy()
     df["日付"] = df["日付"].astype(str)
@@ -317,8 +317,8 @@ def save_to_gsheets(name, action):
     else:
         new_row = pd.DataFrame([{
             "日付": today,
-            "出勤": time_str if action == "出勤" else "",
-            "退勤": time_str if action == "退勤" else ""
+            "出勤": time_str if action == "出勤" else None,
+            "退勤": time_str if action == "退勤" else None
         }])
         df = pd.concat([df, new_row], ignore_index=True)
 
