@@ -149,6 +149,28 @@ st.markdown(f"""
     }}
     </style>
     """, unsafe_allow_html=True)
+    st.markdown("""
+<style>
+[data-testid="stStatusWidget"] {
+    display: none !important;
+}
+[data-testid="stDecoration"] {
+    display: none !important;
+}
+[data-testid="stToolbar"] {
+    display: none !important;
+}
+[data-testid="stHeader"] {
+    display: none !important;
+}
+[data-testid="stToast"] {
+    display: none !important;
+}
+.stSpinner {
+    display: none !important;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # ==========================================
 # 3. 時計＆星セクション
