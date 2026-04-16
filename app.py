@@ -22,7 +22,7 @@ else:
     box_bg, clock_col = "#f9f9f9", MAIN_GRAY
 
 # --- Google Sheets 接続設定 ---
-conn = st.connection("gsheets", type=GSheetsConnection)
+conn = st.connection("gsheets", type=GSheetsConnection, **st.secrets["connections"]["gsheets"])
 URL = st.secrets["spreadsheet"]
 
 # ==========================================
