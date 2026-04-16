@@ -351,20 +351,16 @@ with st.expander("🛠 管理者メニュー"):
 
         c_f1, c_f2, c_f3 = st.columns(3)
 
-        with c_f1:
-            years = sorted(df_view["日付"].dt.year.dropna().unique(), reverse=True)
-            sel_year = st.selectbox("表示年", years)
+with c_f1:
+    years = sorted(df_view["日付"].dt.year.dropna().unique(), reverse=True)
+    sel_year = st.selectbox("表示年", years)
 
-        with c_f2:
-            sel_month = st.selectbox(
-                "表示月",
-                range(1, 13),
-                index=datetime.now().month - 1
-            )
+with c_f2:
+    sel_month = st.selectbox("表示月", range(1, 13), index=datetime.now().month - 1)
 
-        with c_f3:
-            names_filter = ["全員"] + sorted(df_view["名前"].dropna().unique().tolist())
-            sel_name = st.selectbox("スタッフ選択", names_filter)
+with c_f3:
+    names_filter = ["全員"] + sorted(df_view["名前"].dropna().unique().tolist())
+    sel_name = st.selectbox("スタッフ選択", names_filter)
 
         filtered_df = df_view[
             (df_view["日付"].dt.year == sel_year) &
