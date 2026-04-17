@@ -169,6 +169,28 @@ st.markdown("""
 .stSpinner {
     display: none !important;
 }
+try:
+    df_members = conn.read(spreadsheet=URL, worksheet="スタッフ名簿", ttl=0)
+
+    if df_members is None or df_members.empty or "名前" not in df_members.columns:
+        st.error("スタッフ名簿が空か、名前列がありません")
+        st.stop()
+
+    names = (
+        df_members["名前"]
+        .dropna()
+        .astype(str)
+        .str.strip()
+        .tolist()
+    )
+
+    if not names:
+        st.error("スタッフ名簿に名前がありません")
+        st.stop()
+
+except Exception as e:
+    st.error(f"スタッフ名簿の読み込みに失敗しました: {e}")
+    st.stop()
 </style>
 """, unsafe_allow_html=True)
 
