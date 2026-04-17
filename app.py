@@ -37,150 +37,131 @@ URL = "https://docs.google.com/spreadsheets/d/1muQ7GR7RbVtOBYS3nV-xy7VCq66QqE04T
 # 2. CSSデザイン (ボタン・メッセージ・全体)
 # ==========================================
 st.markdown(f"""
-    <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&display=swap');
-
-    /* 基本背景とコンテナ */
-    .stApp {{
-        background-color: {bg_color} !important;
-        font-family: 'Noto Sans JP', sans-serif;
-    }}
-
-    [data-testid="stAppViewBlockContainer"] {{
-        max-width: 500px !important;
-        margin: 0 auto;
-    }}
-
-    header, footer {{ visibility: hidden !important; }}
-
-    /* タブレット誤操作防止 */
-    * {{
-        user-select: none !important;
-        -webkit-user-select: none !important;
-        -webkit-tap-highlight-color: transparent !important;
-    }}
-    html {{ touch-action: manipulation !important; }}
-
-    /* 1. 氏名選択の枠を「ころんと白く」＆「ど真ん中」 */
-    div[data-baseweb="select"] > div {{
-        background-color: #ffffff !important;
-        color: #371637 !important;
-        height: 64px !important;
-        border-radius: 20px !important;
-        border: none !important;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
-
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-    }}
-
-    /* 選択中のテキスト自体の位置調整 */
-    div[data-testid="stSelectbox"] div[role="button"] {{
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        height: 100% !important;
-        font-size: 20px !important;
-        font-weight: 500 !important;
-    }}
-
-    /* 2. 吹き出し：白くてころんとしたデザイン */
-    .balloon-msg {{
-        margin: 20px auto;
-        padding: 15px 25px;
-        width: 100%;
-        text-align: center;
-        background-color: #ffffff;
-        color: {MAIN_GRAY};
-        border-radius: 30px;
-        font-weight: 500;
-        font-size: 17px;
-        position: relative;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        animation: fadeIn 0.4s ease;
-    }}
-
-    .balloon-msg:after {{
-        content: "";
-        position: absolute;
-        top: -12px;
-        left: 50%;
-        margin-left: -10px;
-        border-bottom: 12px solid #ffffff;
-        border-left: 10px solid transparent;
-        border-right: 10px solid transparent;
-    }}
-
-    @keyframes fadeIn {{
-        from {{ opacity: 0; transform: translateY(5px); }}
-        to {{ opacity: 1; transform: translateY(0); }}
-    }}
-
-    /* 3. 虹枠ボタン：横幅を強制的に広げる */
-    div.stButton > button {{
-        width: 100% !important;
-        min-width: 100% !important;
-        height: 80px !important;
-        background-color: transparent !important;
-        color: {disp_text} !important;
-        font-size: 20px !important;
-        font-weight: 500 !important;
-        border: 1px solid !important;
-        border-image: linear-gradient(90deg, #ffeb3b, #ff9800, #f44336, #e91e63, #3f51b5) 1 !important;
-
-        clip-path: polygon(15px 0%, calc(100% - 15px) 0%, 100% 15px, 100% calc(100% - 15px), calc(100% - 15px) 100%, 15px 100%, 0% calc(100% - 15px), 0% 15px) !important;
-
-        border-radius: 0px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-    }}
-
-    /* ボタンの親要素も横いっぱいに広げる */
-    div.stButton {{
-        width: 100% !important;
-    }}
-    div.stElementContainer, div.stButton, div.stButton > button {{
-        width: 100% !important;
-        display: block !important;
-    }}
-    </style>
-    """, unsafe_allow_html=True)
-
-st.markdown(f"""
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&display=swap');
+
+/* 基本背景とコンテナ */
+.stApp {{
+    background-color: {bg_color} !important;
+    font-family: 'Noto Sans JP', sans-serif;
+}}
+
+[data-testid="stAppViewBlockContainer"] {{
+    max-width: 500px !important;
+    margin: 0 auto;
+}}
+
+header, footer {{ visibility: hidden !important; }}
+
+/* タブレット誤操作防止 */
+* {{
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}}
+html {{ touch-action: manipulation !important; }}
+
+/* 氏名selectの見た目 */
+div[data-baseweb="select"] > div {{
+    background-color: #ffffff !important;
+    color: #371637 !important;
+    height: 64px !important;
+    border-radius: 20px !important;
+    border: none !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}}
+
+div[data-testid="stSelectbox"] div[role="button"] {{
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 100% !important;
+    font-size: 20px !important;
+    font-weight: 500 !important;
+}}
+
+/* 氏名selectのカーソル */
+div[data-testid="stSelectbox"] input {{
+    caret-color: transparent !important;
+    cursor: pointer !important;
+}}
+
+div[data-testid="stSelectbox"],
+div[data-testid="stSelectbox"] * {{
+    cursor: pointer !important;
+}}
+
+/* 吹き出し */
+.balloon-msg {{
+    margin: 20px auto;
+    padding: 15px 25px;
+    width: 100%;
+    text-align: center;
+    background-color: #ffffff;
+    color: {MAIN_GRAY};
+    border-radius: 30px;
+    font-weight: 500;
+    font-size: 17px;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    animation: fadeIn 0.4s ease;
+}}
+
+.balloon-msg:after {{
+    content: "";
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    margin-left: -10px;
+    border-bottom: 12px solid #ffffff;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+}}
+
+@keyframes fadeIn {{
+    from {{ opacity: 0; transform: translateY(5px); }}
+    to {{ opacity: 1; transform: translateY(0); }}
+}}
+
+/* ボタン */
+div.stButton > button {{
+    width: 100% !important;
+    min-width: 100% !important;
+    height: 80px !important;
+    background-color: transparent !important;
+    color: {disp_text} !important;
+    font-size: 20px !important;
+    font-weight: 500 !important;
+    border: 1px solid !important;
+    border-image: linear-gradient(90deg, #ffeb3b, #ff9800, #f44336, #e91e63, #3f51b5) 1 !important;
+    clip-path: polygon(15px 0%, calc(100% - 15px) 0%, 100% 15px, 100% calc(100% - 15px), calc(100% - 15px) 100%, 15px 100%, 0% calc(100% - 15px), 0% 15px) !important;
+    border-radius: 0px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}}
+
+div.stButton {{
+    width: 100% !important;
+}}
+
+div.stElementContainer, div.stButton, div.stButton > button {{
+    width: 100% !important;
+    display: block !important;
+}}
+
+/* Streamlit標準UIを隠す */
 [data-testid="stStatusWidget"] {{ display: none !important; }}
 [data-testid="stDecoration"] {{ display: none !important; }}
 [data-testid="stToolbar"] {{ display: none !important; }}
 [data-testid="stHeader"] {{ display: none !important; }}
 [data-testid="stToast"] {{ display: none !important; }}
 .stSpinner {{ display: none !important; }}
-</style>
-""", unsafe_allow_html=True)
-
-st.markdown(f"""
-<style>
-/* 氏名selectの入力カーソルを消す */
-div[data-testid="stSelectbox"] input {{
-    caret-color: transparent !important;
-}}
-</style>
-""", unsafe_allow_html=True)
-
-st.markdown("""
-<style>
-/* 氏名selectで Iビームにならないようにする */
-div[data-testid="stSelectbox"],
-div[data-testid="stSelectbox"] * {
-    cursor: pointer !important;
-}
-
-div[data-testid="stSelectbox"] input {
-    cursor: pointer !important;
-}
 </style>
 """, unsafe_allow_html=True)
 
