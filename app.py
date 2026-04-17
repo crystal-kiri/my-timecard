@@ -351,6 +351,28 @@ st.components.v1.html("""
 
 if 'msg' not in st.session_state:
     st.session_state.msg = "打刻してください"
+
+def calc_work_duration(start_str, end_str, break_minutes):
+    if pd.isna(start_str) or pd.isna(end_str):
+        return None
+
+    try:
+        start_dt = datetime.strptime(str(start_str), "%H:%M:%S")
+        end_dt = datetime.strptime(str(end_str), "%H:%M:%S")
+        break_minutes = int(break_minutes) if pd.notna(break_minutes) else 0
+
+        total_minutes = int((end_dt - start_dt).total_seconds() // 60) - break_minutes
+
+        if total_minutes < 0:
+            total_minutes = 0
+
+        hours = total_minutes // 60
+        minutes = total_minutes % 60
+        return f"{hours:02d}:{minutes:02d}"
+    except Exception:
+        return None
+
+
 def save_to_gsheets(name, action, break_minutes=0):
     now_jst = datetime.now(JST)
     today = now_jst.strftime('%Y-%m-%d')
@@ -363,49 +385,60 @@ def save_to_gsheets(name, action, break_minutes=0):
         return
 
     if df is None or df.empty:
-        df = pd.DataFrame(columns=["日付", "出勤", "退勤", "休憩(分)"])
+        df = pd.DataFrame(columns=["日付", "出勤", "退勤", "休憩(分)", "実稼働"])
 
-    for col in ["日付", "出勤", "退勤", "休憩(分)"]:
+    for col in ["日付", "出勤", "退勤", "休憩(分)", "実稼働"]:
         if col not in df.columns:
             df[col] = None
 
-    df = df[["日付", "出勤", "退勤", "休憩(分)"]].copy()
+    df = df[["日付", "出勤", "退勤", "休憩(分)", "実稼働"]].copy()
     df["日付"] = df["日付"].astype("string")
     df["出勤"] = df["出勤"].astype("string")
     df["退勤"] = df["退勤"].astype("string")
     df["休憩(分)"] = df["休憩(分)"].astype("Int64")
+    df["実稼働"] = df["実稼働"].astype("string")
 
     today_rows = df[df["日付"] == today]
+
     if action == "退勤" and today_rows.empty:
         st.error("先に出勤を押してください")
         return
 
     if not today_rows.empty:
         idx = today_rows.index[-1]
+
         if action == "出勤":
             df.loc[idx, "出勤"] = time_str
         else:
             if pd.notna(df.loc[idx, "退勤"]):
                 st.warning("すでに退勤済みです")
                 return
+
             df.loc[idx, "退勤"] = time_str
             df.loc[idx, "休憩(分)"] = break_minutes
+            df.loc[idx, "実稼働"] = calc_work_duration(
+                df.loc[idx, "出勤"],
+                df.loc[idx, "退勤"],
+                df.loc[idx, "休憩(分)"]
+            )
     else:
         new_row = pd.DataFrame([{
             "日付": today,
             "出勤": time_str if action == "出勤" else None,
             "退勤": time_str if action == "退勤" else None,
-            "休憩(分)": break_minutes if action == "退勤" else None
+            "休憩(分)": break_minutes if action == "退勤" else None,
+            "実稼働": None
         }])
 
         new_row["日付"] = new_row["日付"].astype("string")
         new_row["出勤"] = new_row["出勤"].astype("string")
         new_row["退勤"] = new_row["退勤"].astype("string")
         new_row["休憩(分)"] = new_row["休憩(分)"].astype("Int64")
+        new_row["実稼働"] = new_row["実稼働"].astype("string")
 
         df = pd.concat([df, new_row], ignore_index=True)
 
-    out_df = df[["日付", "出勤", "退勤", "休憩(分)"]].copy()
+    out_df = df[["日付", "出勤", "退勤", "休憩(分)", "実稼働"]].copy()
     conn.update(spreadsheet=URL, worksheet=name, data=out_df)
 
 selected_break = break_slider(
