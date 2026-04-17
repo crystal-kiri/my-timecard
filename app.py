@@ -309,8 +309,8 @@ def save_to_gsheets(name, action, break_minutes=0):
 
     today_rows = df[df["日付"] == today]
     if action == "退勤" and today_rows.empty:
-    st.error("先に出勤を押してください")
-    return
+        st.error("先に出勤を押してください")
+        return
 
     if not today_rows.empty:
         idx = today_rows.index[-1]
