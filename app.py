@@ -412,7 +412,7 @@ selected_break = st.slider(
     step=5,
     value=60
 )
-
+st.markdown('<div class="break-scale"><span>0</span><span>60</span></div>', unsafe_allow_html=True)
 if selected_break == 0:
     st.caption("休憩なし")
 c1, c2 = st.columns(2)
