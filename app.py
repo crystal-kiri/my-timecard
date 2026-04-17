@@ -163,37 +163,24 @@ st.markdown(f"""
 
 st.markdown(f"""
 <style>
-
 /* ===== 休憩スライダー ===== */
-div[data-testid="stSlider"] [role="tooltip"] {{
-    display: none !important;
-}}
-div[data-testid="stSlider"] [data-baseweb="popover"] {{
-    display: none !important;
-}}
-div[data-testid="stSlider"] [data-baseweb="tooltip"] {{
-    display: none !important;
-}}
-
-/* スライダーの目盛り（謎の点）完全削除 */
-div[data-testid="stSlider"] [data-baseweb="slider"] svg {{
-    display: none !important;
-}}
 
 /* ラベル文字 */
 div[data-testid="stSlider"] label,
-div[data-testid="stSlider"] p,
-div[data-testid="stSlider"] span {{
+div[data-testid="stSlider"] p {{
     color: {disp_text} !important;
 }}
 
-/* 余計なtickを消す */
-div[data-testid="stSlider"] [data-baseweb="slider"] div[aria-hidden="true"] {{
+/* 標準の数字・tick・hover表示を全部消す */
+div[data-testid="stSlider"] [data-baseweb="slider"] span,
+div[data-testid="stSlider"] [data-baseweb="slider"] svg,
+div[data-testid="stSlider"] [data-baseweb="slider"] div[aria-hidden="true"],
+div[data-testid="stSlider"] [role="tooltip"],
+div[data-testid="stSlider"] [data-baseweb="tooltip"],
+div[data-testid="stSlider"] [data-baseweb="popover"] {{
     display: none !important;
 }}
-div[data-testid="stSlider"] [role="tooltip"] * {{
-    display: none !important;
-}}
+
 /* スライダー本体の線 */
 div[data-testid="stSlider"] [data-baseweb="slider"] > div > div {{
     background: linear-gradient(90deg,
@@ -219,11 +206,18 @@ div[data-testid="stSlider"] div[role="slider"] {{
     box-shadow: 0 0 8px rgba(233, 30, 99, 0.25) !important;
 }}
 
-/* 数字 */
-div[data-testid="stSlider"] [data-baseweb="slider"] span {{
-    color: {disp_text} !important;
+/* 自作の左右数字 */
+.break-scale {{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: -6px;
+    padding: 0 2px;
+    color: {disp_text};
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1;
 }}
-
 </style>
 """, unsafe_allow_html=True)
 # ==========================================
