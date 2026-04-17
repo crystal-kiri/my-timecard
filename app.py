@@ -199,6 +199,33 @@ except Exception as e:
     rgba(233,30,99,0.7),
     rgba(63,81,181,0.7)
 ) !important;
+/* トラック全体 */
+div[data-baseweb="slider"] > div {
+    background: linear-gradient(
+        90deg,
+        #ffeb3b,
+        #ff9800,
+        #f44336,
+        #e91e63,
+        #3f51b5
+    ) !important;
+    height: 6px !important;
+    border-radius: 10px !important;
+}
+
+/* スライダーつまみ */
+div[data-baseweb="slider"] span {
+    background: white !important;
+    border: 3px solid #e91e63 !important;
+}
+background: linear-gradient(
+    90deg,
+    rgba(255,235,59,0.7),
+    rgba(255,152,0,0.7),
+    rgba(244,67,54,0.7),
+    rgba(233,30,99,0.7),
+    rgba(63,81,181,0.7)
+) !important;
 </style>
 """, unsafe_allow_html=True)
 
