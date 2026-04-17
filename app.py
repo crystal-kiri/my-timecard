@@ -149,54 +149,20 @@ st.markdown(f"""
     }}
     </style>
     """, unsafe_allow_html=True)
-st.markdown("""
-<style>
-[data-testid="stStatusWidget"] {
-    display: none !important;
-}
-[data-testid="stDecoration"] {
-    display: none !important;
-}
-[data-testid="stToolbar"] {
-    display: none !important;
-}
-[data-testid="stHeader"] {
-    display: none !important;
-}
-[data-testid="stToast"] {
-    display: none !important;
-}
-.stSpinner {
-    display: none !important;
-}
 
 st.markdown("""
 <style>
-[data-testid="stStatusWidget"] {
-    display: none !important;
-}
-[data-testid="stDecoration"] {
-    display: none !important;
-}
-[data-testid="stToolbar"] {
-    display: none !important;
-}
-[data-testid="stHeader"] {
-    display: none !important;
-}
-[data-testid="stToast"] {
-    display: none !important;
-}
-.stSpinner {
-    display: none !important;
-}
+[data-testid="stStatusWidget"] { display: none !important; }
+[data-testid="stDecoration"] { display: none !important; }
+[data-testid="stToolbar"] { display: none !important; }
+[data-testid="stHeader"] { display: none !important; }
+[data-testid="stToast"] { display: none !important; }
+.stSpinner { display: none !important; }
 
 /* ===== 休憩スライダー ===== */
 
-/* トラック全体 */
 div[data-testid="stSlider"] [data-baseweb="slider"] > div {
-    background: linear-gradient(
-        90deg,
+    background: linear-gradient(90deg,
         rgba(255,235,59,0.85),
         rgba(255,152,0,0.85),
         rgba(244,67,54,0.85),
@@ -207,7 +173,6 @@ div[data-testid="stSlider"] [data-baseweb="slider"] > div {
     height: 6px !important;
 }
 
-/* つまみ */
 div[data-testid="stSlider"] div[role="slider"] {
     background: #ffffff !important;
     border: 3px solid #e91e63 !important;
