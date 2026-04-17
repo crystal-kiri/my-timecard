@@ -50,6 +50,9 @@ st.markdown(f"""
     max-width: 500px !important;
     margin: 0 auto;
 }}
+[data-testid="stMainBlockContainer"] {
+    transform: translateY(-6px);
+}
 
 header, footer {{ visibility: hidden !important; }}
 
