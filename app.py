@@ -191,7 +191,9 @@ div[data-testid="stSlider"] span {{
 div[data-testid="stSlider"] [data-baseweb="slider"] div[aria-hidden="true"] {{
     display: none !important;
 }}
-
+div[data-testid="stSlider"] [role="tooltip"] * {{
+    display: none !important;
+}}
 /* スライダー本体の線 */
 div[data-testid="stSlider"] [data-baseweb="slider"] > div > div {{
     background: linear-gradient(90deg,
