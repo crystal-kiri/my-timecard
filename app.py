@@ -219,9 +219,25 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+st.markdown("""
+<style>
+/* 時計の上の空白だけ削る */
+.clock-anchor {
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.clock-anchor + div[data-testid="stElementContainer"] {
+    margin-top: -16px !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
 # ==========================================
 # 3. 時計＆星セクション
 # ==========================================
+st.markdown('<div class="clock-anchor"></div>', unsafe_allow_html=True)
 st.components.v1.html(f"""
     <div id="container" style="width: 100%; height: 140px; position: relative; overflow: hidden; border-radius:20px; cursor: crosshair;">
         <canvas id="bg" style="position: absolute; top:0; left:0; width:100%; height:100%; z-index:1;"></canvas>
