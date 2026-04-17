@@ -170,6 +170,20 @@ div[data-testid="stSelectbox"] input {{
 </style>
 """, unsafe_allow_html=True)
 
+st.markdown("""
+<style>
+/* 氏名selectで Iビームにならないようにする */
+div[data-testid="stSelectbox"],
+div[data-testid="stSelectbox"] * {
+    cursor: pointer !important;
+}
+
+div[data-testid="stSelectbox"] input {
+    cursor: pointer !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
 # ==========================================
 # 3. 時計＆星セクション
 # ==========================================
