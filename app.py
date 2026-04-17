@@ -200,19 +200,6 @@ div[data-testid="stSlider"] div[role="slider"] {{
     border: 2px solid #e91e63 !important;
     box-shadow: 0 0 8px rgba(233, 30, 99, 0.25) !important;
 }}
-
-/* 自作の左右数字 */
-.break-scale {{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: -6px;
-    padding: 0 2px;
-    color: {disp_text};
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1;
-}}
 </style>
 """, unsafe_allow_html=True)
 # ==========================================
@@ -407,6 +394,34 @@ selected_break = st.slider(
     step=5,
     value=60
 )
+st.components.v1.html("""
+<script>
+(function() {
+  const doc = window.parent.document;
+
+  function killSliderHoverStuff() {
+    // スライダーのつまみに付くブラウザ標準tooltip候補を消す
+    doc.querySelectorAll('div[data-testid="stSlider"] div[role="slider"]').forEach(el => {
+      el.removeAttribute("title");
+      el.removeAttribute("aria-valuetext");
+    });
+
+    // BaseWeb / Streamlit 側の hover 表示を消す
+    doc.querySelectorAll('[role="tooltip"], [data-baseweb="tooltip"], [data-baseweb="popover"]').forEach(el => {
+      el.remove();
+    });
+
+    // hover時に出るSVGやマーク系を消す
+    doc.querySelectorAll('div[data-testid="stSlider"] svg').forEach(el => {
+      el.style.display = "none";
+    });
+  }
+
+  killSliderHoverStuff();
+  setInterval(killSliderHoverStuff, 300);
+})();
+</script>
+""", height=0)
 
 if selected_break == 0:
     st.caption("休憩なし")
