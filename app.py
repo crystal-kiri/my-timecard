@@ -165,6 +165,16 @@ st.markdown(f"""
 <style>
 
 /* ===== 休憩スライダー ===== */
+div[data-testid="stSlider"] [role="tooltip"] {{
+    display: none !important;
+}}
+div[data-testid="stSlider"] [data-baseweb="popover"] {{
+    display: none !important;
+}}
+div[data-testid="stSlider"] [data-baseweb="tooltip"] {{
+    display: none !important;
+}}
+
 /* スライダーの目盛り（謎の点）完全削除 */
 div[data-testid="stSlider"] [data-baseweb="slider"] svg {{
     display: none !important;
