@@ -160,16 +160,20 @@ st.markdown(f"""
 .stSpinner {{ display: none !important; }}
 
 /* ===== 休憩スライダー ===== */
-
-div[data-testid="stSlider"] [data-baseweb="slider"] div[role="presentation"] {{
-    display: none !important;
-}}
+st.markdown(f"""
+<style>
+/* ===== 休憩スライダー ===== */
 
 /* ラベル文字 */
 div[data-testid="stSlider"] label,
 div[data-testid="stSlider"] p,
 div[data-testid="stSlider"] span {{
     color: {disp_text} !important;
+}}
+
+/* 余計なtickを消す */
+div[data-testid="stSlider"] [data-baseweb="slider"] div[aria-hidden="true"] {{
+    display: none !important;
 }}
 
 /* スライダー本体の線 */
@@ -201,32 +205,6 @@ div[data-testid="stSlider"] div[role="slider"] {{
 div[data-testid="stSlider"] [data-baseweb="slider"] span {{
     color: {disp_text} !important;
     font-weight: 500 !important;
-}}
-
-/* 左右の点 */
-div[data-testid="stSlider"] [data-baseweb="slider"] {{
-    position: relative;
-}}
-
-div[data-testid="stSlider"] [data-baseweb="slider"]::before,
-div[data-testid="stSlider"] [data-baseweb="slider"]::after {{
-    content: "";
-    position: absolute;
-    bottom: -10px;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: {disp_text} !important;
-}}
-
-div[data-testid="stSlider"] [data-baseweb="slider"]::before {{
-    left: 0;
-    transform: translateX(0);
-}}
-
-div[data-testid="stSlider"] [data-baseweb="slider"]::after {{
-    right: 0;
-    transform: translateX(0);
 }}
 </style>
 """, unsafe_allow_html=True)
