@@ -169,23 +169,21 @@ st.markdown("""
 .stSpinner {
     display: none !important;
 }
-div[role="radiogroup"] > label {{
+div[role="radiogroup"] > label {
     background: white !important;
     border-radius: 18px !important;
     padding: 12px 16px !important;
     margin-bottom: 10px !important;
     border: none !important;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
-}}
+}
 
-div[role="radiogroup"] label p {{
+div[role="radiogroup"] label p {
     font-size: 20px !important;
     font-weight: 500 !important;
     color: #371637 !important;
-}}
+}
 
-</style>
-""", unsafe_allow_html=True)
 </style>
 """, unsafe_allow_html=True)
 
@@ -357,12 +355,6 @@ def save_to_gsheets(name, action, break_minutes=0):
     conn.update(spreadsheet=URL, worksheet=name, data=out_df)
 
 break_options = [0] + list(range(5, 181, 5))
-selected_break = st.select_slider(
-    "今日の休憩時間",
-    options=break_options,
-    value=60,
-    format_func=lambda x: "休憩なし" if x == 0 else f"{x}分"
-)
 selected_break = st.select_slider(
     "今日の休憩時間",
     options=break_options,
