@@ -160,17 +160,22 @@ st.markdown("""
 .stSpinner { display: none !important; }
 
 /* ===== 休憩スライダー ===== */
-
-div[data-testid="stSlider"] [data-baseweb="slider"] > div {
+/* ===== スライダーのベースライン（全体） ===== */
+div[data-testid="stSlider"] [data-baseweb="slider"] > div > div {
     background: linear-gradient(90deg,
-        rgba(255,235,59,0.85),
-        rgba(255,152,0,0.85),
-        rgba(244,67,54,0.85),
-        rgba(233,30,99,0.85),
-        rgba(63,81,181,0.85)
+        #ffeb3b,
+        #ff9800,
+        #f44336,
+        #e91e63,
+        #3f51b5
     ) !important;
-    border-radius: 999px !important;
     height: 6px !important;
+    border-radius: 999px !important;
+}
+
+/* ===== 上に乗ってる進行バーを消す ===== */
+div[data-testid="stSlider"] [data-baseweb="slider"] div[style*="width"] {
+    background: transparent !important;
 }
 
 div[data-testid="stSlider"] div[role="slider"] {
