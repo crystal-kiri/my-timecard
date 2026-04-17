@@ -169,6 +169,23 @@ st.markdown("""
 .stSpinner {
     display: none !important;
 }
+div[role="radiogroup"] > label {{
+    background: white !important;
+    border-radius: 18px !important;
+    padding: 12px 16px !important;
+    margin-bottom: 10px !important;
+    border: none !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+}}
+
+div[role="radiogroup"] label p {{
+    font-size: 20px !important;
+    font-weight: 500 !important;
+    color: #371637 !important;
+}}
+
+</style>
+""", unsafe_allow_html=True)
 </style>
 """, unsafe_allow_html=True)
 
@@ -279,7 +296,12 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-selected_name = st.selectbox("USER", names, label_visibility="collapsed")
+selected_name = st.radio(
+    "USER",
+    names,
+    label_visibility="collapsed",
+    horizontal=False
+)
 
 if 'msg' not in st.session_state:
     st.session_state.msg = "打刻してください"
