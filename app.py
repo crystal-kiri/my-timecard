@@ -169,66 +169,52 @@ st.markdown("""
 .stSpinner {
     display: none !important;
 }
-try:
-    df_members = conn.read(spreadsheet=URL, worksheet="スタッフ名簿", ttl=0)
 
-    if df_members is None or df_members.empty or "名前" not in df_members.columns:
-        st.error("スタッフ名簿が空か、名前列がありません")
-        st.stop()
+st.markdown("""
+<style>
+[data-testid="stStatusWidget"] {
+    display: none !important;
+}
+[data-testid="stDecoration"] {
+    display: none !important;
+}
+[data-testid="stToolbar"] {
+    display: none !important;
+}
+[data-testid="stHeader"] {
+    display: none !important;
+}
+[data-testid="stToast"] {
+    display: none !important;
+}
+.stSpinner {
+    display: none !important;
+}
 
-    names = (
-        df_members["名前"]
-        .dropna()
-        .astype(str)
-        .str.strip()
-        .tolist()
-    )
+/* ===== 休憩スライダー ===== */
 
-    if not names:
-        st.error("スタッフ名簿に名前がありません")
-        st.stop()
-
-except Exception as e:
-    st.error(f"スタッフ名簿の読み込みに失敗しました: {e}")
-    st.stop()
-    background: linear-gradient(
-    90deg,
-    rgba(255,235,59,0.7),
-    rgba(255,152,0,0.7),
-    rgba(244,67,54,0.7),
-    rgba(233,30,99,0.7),
-    rgba(63,81,181,0.7)
-) !important;
 /* トラック全体 */
-div[data-baseweb="slider"] > div {
+div[data-testid="stSlider"] [data-baseweb="slider"] > div {
     background: linear-gradient(
         90deg,
-        #ffeb3b,
-        #ff9800,
-        #f44336,
-        #e91e63,
-        #3f51b5
+        rgba(255,235,59,0.85),
+        rgba(255,152,0,0.85),
+        rgba(244,67,54,0.85),
+        rgba(233,30,99,0.85),
+        rgba(63,81,181,0.85)
     ) !important;
+    border-radius: 999px !important;
     height: 6px !important;
-    border-radius: 10px !important;
 }
 
-/* スライダーつまみ */
-div[data-baseweb="slider"] span {
-    background: white !important;
+/* つまみ */
+div[data-testid="stSlider"] div[role="slider"] {
+    background: #ffffff !important;
     border: 3px solid #e91e63 !important;
+    box-shadow: 0 0 10px rgba(233, 30, 99, 0.35) !important;
 }
-background: linear-gradient(
-    90deg,
-    rgba(255,235,59,0.7),
-    rgba(255,152,0,0.7),
-    rgba(244,67,54,0.7),
-    rgba(233,30,99,0.7),
-    rgba(63,81,181,0.7)
-) !important;
 </style>
 """, unsafe_allow_html=True)
-
 # ==========================================
 # 3. 時計＆星セクション
 # ==========================================
@@ -414,13 +400,16 @@ def save_to_gsheets(name, action, break_minutes=0):
     out_df = df[["日付", "出勤", "退勤", "休憩(分)"]].copy()
     conn.update(spreadsheet=URL, worksheet=name, data=out_df)
 
-break_options = [0] + list(range(5, 61, 5))
-selected_break = st.select_slider(
+selected_break = st.slider(
     "今日の休憩時間",
-    options=break_options,
-    value=60,
-    format_func=lambda x: "休憩なし" if x == 0 else f"{x}分"
+    min_value=0,
+    max_value=60,
+    step=5,
+    value=60
 )
+
+if selected_break == 0:
+    st.caption("休憩なし")
 c1, c2 = st.columns(2)
 
 clicked_action = None
