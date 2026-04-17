@@ -160,7 +160,6 @@ st.markdown("""
 .stSpinner { display: none !important; }
 
 /* ===== 休憩スライダー ===== */
-/* ===== スライダーのベースライン（全体） ===== */
 div[data-testid="stSlider"] [data-baseweb="slider"] > div > div {
     background: linear-gradient(90deg,
         #ffeb3b,
@@ -169,7 +168,7 @@ div[data-testid="stSlider"] [data-baseweb="slider"] > div > div {
         #e91e63,
         #3f51b5
     ) !important;
-    height: 6px !important;
+    height: 4px !important;
     border-radius: 999px !important;
 }
 
