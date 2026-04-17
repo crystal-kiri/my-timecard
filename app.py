@@ -418,8 +418,6 @@ selected_break = break_slider(
     key="break_slider",
 )
 
-if selected_break == 0:
-    st.caption("休憩なし")
 c1, c2 = st.columns(2)
 
 clicked_action = None
