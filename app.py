@@ -169,21 +169,6 @@ st.markdown("""
 .stSpinner {
     display: none !important;
 }
-div[role="radiogroup"] > label {
-    background: white !important;
-    border-radius: 18px !important;
-    padding: 12px 16px !important;
-    margin-bottom: 10px !important;
-    border: none !important;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
-}
-
-div[role="radiogroup"] label p {
-    font-size: 20px !important;
-    font-weight: 500 !important;
-    color: #371637 !important;
-}
-
 </style>
 """, unsafe_allow_html=True)
 
@@ -294,12 +279,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-selected_name = st.radio(
-    "USER",
-    names,
-    label_visibility="collapsed",
-    horizontal=False
-)
+selected_name = st.selectbox("USER", names, label_visibility="collapsed")
 
 if 'msg' not in st.session_state:
     st.session_state.msg = "打刻してください"
@@ -354,7 +334,7 @@ def save_to_gsheets(name, action, break_minutes=0):
     out_df = df[["日付", "出勤", "退勤", "休憩(分)"]].copy()
     conn.update(spreadsheet=URL, worksheet=name, data=out_df)
 
-break_options = [0] + list(range(5, 181, 5))
+break_options = [0] + list(range(5, 61, 5))
 selected_break = st.select_slider(
     "今日の休憩時間",
     options=break_options,
