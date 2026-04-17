@@ -184,6 +184,41 @@ div[data-testid="stSelectbox"] input {
 </style>
 """, unsafe_allow_html=True)
 
+st.markdown("""
+<style>
+
+/* 小さい画面（タブレット・古い端末） */
+@media (max-height: 700px) {
+
+    /* 時計コンテナを圧縮 */
+    #container {
+        height: 130px !important;
+    }
+
+    /* タイトル間隔を詰める */
+    .stApp h1, .stApp h2, .stApp h3 {
+        margin-top: 5px !important;
+        margin-bottom: 5px !important;
+    }
+
+    /* 吹き出しを上に寄せる */
+    .balloon-msg {
+        margin-top: 10px !important;
+        margin-bottom: 10px !important;
+        font-size: 15px !important;
+        padding: 10px 15px !important;
+    }
+
+    /* ボタン少しコンパクト */
+    div.stButton > button {
+        height: 65px !important;
+        font-size: 18px !important;
+    }
+}
+
+</style>
+""", unsafe_allow_html=True)
+
 # ==========================================
 # 3. 時計＆星セクション
 # ==========================================
@@ -275,8 +310,7 @@ st.components.v1.html(f"""
     }}
     draw();
     </script>
-""", height=180)
-
+""", height=140 if st.session_state.get("is_small_screen", False) else 180)
 # ==========================================
 # 4. 操作セクション
 # ==========================================
