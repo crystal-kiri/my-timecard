@@ -357,7 +357,12 @@ def save_to_gsheets(name, action, break_minutes=0):
     conn.update(spreadsheet=URL, worksheet=name, data=out_df)
 
 break_options = [0] + list(range(5, 181, 5))
-
+selected_break = st.select_slider(
+    "今日の休憩時間",
+    options=break_options,
+    value=60,
+    format_func=lambda x: "休憩なし" if x == 0 else f"{x}分"
+)
 selected_break = st.select_slider(
     "今日の休憩時間",
     options=break_options,
@@ -385,8 +390,7 @@ if clicked_msg is not None:
 st.markdown(f'<div class="balloon-msg">{st.session_state.msg}</div>', unsafe_allow_html=True)
 
 if clicked_action is not None:
-    save_to_gsheets(selected_name, clicked_action)
-
+    save_to_gsheets(selected_name, clicked_action, selected_break)
 # ==========================================
 # 5. 管理者ツール
 # ==========================================
