@@ -258,7 +258,7 @@ st.components.v1.html(f"""
 # 4. 操作セクション
 # ==========================================
 try:
-    df_members = conn.read(spreadsheet=URL, worksheet="スタッフ名簿", ttl=0)
+    df_members = conn.read(spreadsheet=URL, worksheet="スタッフ名簿", ttl=60)
 
     if df_members is None or df_members.empty or "名前" not in df_members.columns:
         st.error("スタッフ名簿が空か、名前列がありません")
@@ -295,7 +295,7 @@ def save_to_gsheets(name, action, break_minutes=0):
     time_str = now_jst.strftime('%H:%M:%S')
 
     try:
-        df = conn.read(spreadsheet=URL, worksheet=name, ttl=0)
+        df = conn.read(spreadsheet=URL, worksheet=name, ttl=60)
     except Exception:
         st.error(f"{name} のシートが見つかりません")
         return
@@ -398,7 +398,7 @@ with st.expander("🛠 管理者メニュー"):
             df_m = conn.read(
                 spreadsheet=URL,
                 worksheet="スタッフ名簿",
-                ttl=0
+                ttl=60
             )
             curr_names = df_m['名前'].tolist()
 
