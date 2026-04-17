@@ -219,15 +219,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown("""
-<style>
-/* 時計の上の余白だけ削る（ピンポイント） */
-div[data-testid="stElementContainer"]:has(#container) {
-    margin-top: -20px !important;
-}
-</style>
-""", unsafe_allow_html=True)
-
 # ==========================================
 # 3. 時計＆星セクション
 # ==========================================
