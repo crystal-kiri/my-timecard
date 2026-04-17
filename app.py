@@ -161,6 +161,9 @@ st.markdown(f"""
 
 /* ===== 休憩スライダー ===== */
 
+div[data-testid="stSlider"] [data-baseweb="slider"] div[role="presentation"] {
+    display: none !important;
+}
 /* ラベル文字 */
 div[data-testid="stSlider"] label,
 div[data-testid="stSlider"] p,
