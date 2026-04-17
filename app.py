@@ -305,8 +305,7 @@ selected_name = st.radio(
 
 if 'msg' not in st.session_state:
     st.session_state.msg = "打刻してください"
-
-def save_to_gsheets(name, action):
+def save_to_gsheets(name, action, break_minutes=0):
     now_jst = datetime.now(JST)
     today = now_jst.strftime('%Y-%m-%d')
     time_str = now_jst.strftime('%H:%M:%S')
@@ -318,20 +317,17 @@ def save_to_gsheets(name, action):
         return
 
     if df is None or df.empty:
-        df = pd.DataFrame(columns=["日付", "出勤", "退勤"])
+        df = pd.DataFrame(columns=["日付", "出勤", "退勤", "休憩(分)"])
 
-    # 必要列をそろえる
-    for col in ["日付", "出勤", "退勤"]:
+    for col in ["日付", "出勤", "退勤", "休憩(分)"]:
         if col not in df.columns:
             df[col] = None
 
-    # 列順固定
-    df = df[["日付", "出勤", "退勤"]].copy()
-
-    # ここが重要：文字列列として固定
+    df = df[["日付", "出勤", "退勤", "休憩(分)"]].copy()
     df["日付"] = df["日付"].astype("string")
     df["出勤"] = df["出勤"].astype("string")
     df["退勤"] = df["退勤"].astype("string")
+    df["休憩(分)"] = df["休憩(分)"].astype("Int64")
 
     today_rows = df[df["日付"] == today]
 
@@ -341,23 +337,33 @@ def save_to_gsheets(name, action):
             df.loc[idx, "出勤"] = time_str
         else:
             df.loc[idx, "退勤"] = time_str
+            df.loc[idx, "休憩(分)"] = break_minutes
     else:
         new_row = pd.DataFrame([{
             "日付": today,
             "出勤": time_str if action == "出勤" else None,
-            "退勤": time_str if action == "退勤" else None
+            "退勤": time_str if action == "退勤" else None,
+            "休憩(分)": break_minutes if action == "退勤" else None
         }])
 
         new_row["日付"] = new_row["日付"].astype("string")
         new_row["出勤"] = new_row["出勤"].astype("string")
         new_row["退勤"] = new_row["退勤"].astype("string")
+        new_row["休憩(分)"] = new_row["休憩(分)"].astype("Int64")
 
         df = pd.concat([df, new_row], ignore_index=True)
 
-    # 保存前にもう一度列順固定
-    out_df = df[["日付", "出勤", "退勤"]].copy()
+    out_df = df[["日付", "出勤", "退勤", "休憩(分)"]].copy()
     conn.update(spreadsheet=URL, worksheet=name, data=out_df)
 
+break_options = [0] + list(range(5, 181, 5))
+
+selected_break = st.select_slider(
+    "今日の休憩時間",
+    options=break_options,
+    value=60,
+    format_func=lambda x: "休憩なし" if x == 0 else f"{x}分"
+)
 c1, c2 = st.columns(2)
 
 clicked_action = None
