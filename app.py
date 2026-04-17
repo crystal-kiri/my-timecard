@@ -184,62 +184,11 @@ div[data-testid="stSelectbox"] input {
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown("""
-<style>
-
-/* 小さい画面（タブレット・古い端末） */
-@media (max-height: 700px) {
-
-    /* 時計コンテナを圧縮 */
-    #container {
-        height: 130px !important;
-    }
-
-    /* タイトル間隔を詰める */
-    .stApp h1, .stApp h2, .stApp h3 {
-        margin-top: 5px !important;
-        margin-bottom: 5px !important;
-    }
-
-    /* 吹き出しを上に寄せる */
-    .balloon-msg {
-        margin-top: 10px !important;
-        margin-bottom: 10px !important;
-        font-size: 15px !important;
-        padding: 10px 15px !important;
-    }
-
-    /* ボタン少しコンパクト */
-    div.stButton > button {
-        height: 65px !important;
-        font-size: 18px !important;
-    }
-}
-
-</style>
-""", unsafe_allow_html=True)
-
-st.markdown("""
-<style>
-/* 時計の上の空白だけ削る */
-.clock-anchor {
-    height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-.clock-anchor + div[data-testid="stElementContainer"] {
-    margin-top: -16px !important;
-}
-</style>
-""", unsafe_allow_html=True)
-
 # ==========================================
 # 3. 時計＆星セクション
 # ==========================================
-st.markdown('<div class="clock-anchor"></div>', unsafe_allow_html=True)
 st.components.v1.html(f"""
-    <div id="container" style="width: 100%; height: 140px; position: relative; overflow: hidden; border-radius:20px; cursor: crosshair;">
+    <div id="container" style="width: 100%; height: 180px; position: relative; overflow: hidden; border-radius:20px; cursor: crosshair;">
         <canvas id="bg" style="position: absolute; top:0; left:0; width:100%; height:100%; z-index:1;"></canvas>
         <canvas id="clk" width="160" height="160" style="position: relative; z-index:2; margin: 0 auto; display: block; pointer-events: none;"></canvas>
     </div>
@@ -326,7 +275,7 @@ st.components.v1.html(f"""
     }}
     draw();
     </script>
-""", height=140)
+""", height=180)
 # ==========================================
 # 4. 操作セクション
 # ==========================================
