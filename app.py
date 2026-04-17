@@ -223,7 +223,7 @@ st.markdown("""
 # 3. 時計＆星セクション
 # ==========================================
 st.components.v1.html(f"""
-    <div id="container" style="width: 100%; height: 180px; position: relative; overflow: hidden; border-radius:20px; cursor: crosshair;">
+    <div id="container" style="width: 100%; height: 140px; position: relative; overflow: hidden; border-radius:20px; cursor: crosshair;">
         <canvas id="bg" style="position: absolute; top:0; left:0; width:100%; height:100%; z-index:1;"></canvas>
         <canvas id="clk" width="160" height="160" style="position: relative; z-index:2; margin: 0 auto; display: block; pointer-events: none;"></canvas>
     </div>
@@ -310,7 +310,7 @@ st.components.v1.html(f"""
     }}
     draw();
     </script>
-""", height=140 if st.session_state.get("is_small_screen", False) else 180)
+""", height=140)
 # ==========================================
 # 4. 操作セクション
 # ==========================================
