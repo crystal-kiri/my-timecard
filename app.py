@@ -468,7 +468,7 @@ with st.expander("🛠 管理者メニュー"):
                             st.session_state.delete_confirm = False
                             st.rerun()
 
-    st.markdown("""
+st.markdown("""
     <style>
     div[data-testid="stExpander"] button[kind="secondary"],
     div[data-testid="stExpander"] button[kind="primary"] {
@@ -491,3 +491,6 @@ with st.expander("🛠 管理者メニュー"):
     }
     </style>
     """, unsafe_allow_html=True)
+
+
+    
