@@ -12,7 +12,7 @@ st.set_page_config(page_title="CRYSTAL TIME CARD", layout="centered")
 
 JST = timezone(timedelta(hours=+9), 'JST')
 now = datetime.now(JST)
-is_night = False
+is_night = (now.hour >= 17 or now.hour < 8)
 MAIN_GRAY = "#454444"
 
 if is_night:
