@@ -51,7 +51,7 @@ st.markdown(f"""
     margin: 0 auto;
 }}
 [data-testid="stMainBlockContainer"] {{
-    transform: translateY(-20px);
+    transform: translateY(-30px);
 }}
 header, footer {{ visibility: hidden !important; }}
 
