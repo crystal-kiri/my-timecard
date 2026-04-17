@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Break Slider</title>
+  <style>
+    :root {
+      --text-color: #454444;
+      --track-height: 4px;
+      --thumb-size: 20px;
+      --thumb-border: #e91e63;
+      --label-size: 14px;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      font-family: 'Noto Sans JP', sans-serif;
+      overflow: hidden;
+    }
+
+    .wrap {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 8px 2px 0 2px;
+      background: transparent;
+    }
+
+    .title {
+      color: var(--text-color);
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+
+    .slider-shell {
+      position: relative;
+      width: 100%;
+      height: 28px;
+      display: flex;
+      align-items: center;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      background: transparent;
+      outline: none;
+      margin: 0;
+      padding: 0;
+      height: 28px;
+    }
+
+    input[type="range"]::-webkit-slider-runnable-track {
+      height: var(--track-height);
+      border-radius: 999px;
+      background: linear-gradient(90deg,
+        #ffeb3b,
+        #ff9800,
+        #f44336,
+        #e91e63,
+        #3f51b5
+      );
+    }
+
+    input[type="range"]::-moz-range-track {
+      height: var(--track-height);
+      border-radius: 999px;
+      background: linear-gradient(90deg,
+        #ffeb3b,
+        #ff9800,
+        #f44336,
+        #e91e63,
+        #3f51b5
+      );
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: var(--thumb-size);
+      height: var(--thumb-size);
+      border-radius: 999px;
+      background: #ffffff;
+      border: 2px solid var(--thumb-border);
+      box-shadow: 0 0 8px rgba(233, 30, 99, 0.25);
+      margin-top: calc((var(--track-height) - var(--thumb-size)) / 2);
+      cursor: pointer;
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: var(--thumb-size);
+      height: var(--thumb-size);
+      border-radius: 999px;
+      background: #ffffff;
+      border: 2px solid var(--thumb-border);
+      box-shadow: 0 0 8px rgba(233, 30, 99, 0.25);
+      cursor: pointer;
+    }
+
+    .value-row {
+      margin-top: 8px;
+      color: var(--text-color);
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: right;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="title" id="title">今日の休憩時間</div>
+
+    <div class="slider-shell">
+      <input id="slider" type="range" min="0" max="60" step="5" value="60" />
+    </div>
+
+    <div class="value-row" id="valueText">60分</div>
+  </div>
+
+  <script>
+    function sendValue(value) {
+      const payload = {
+        isStreamlitMessage: true,
+        type: "streamlit:setComponentValue",
+        value: Number(value)
+      };
+      window.parent.postMessage(payload, "*");
+    }
+
+    function setFrameHeight() {
+      const payload = {
+        isStreamlitMessage: true,
+        type: "streamlit:setFrameHeight",
+        height: document.documentElement.scrollHeight
+      };
+      window.parent.postMessage(payload, "*");
+    }
+
+    function applyTheme(args) {
+      const root = document.documentElement;
+      root.style.setProperty("--text-color", args.textColor || "#454444");
+      document.getElementById("title").textContent = args.label || "今日の休憩時間";
+    }
+
+    function updateValueText(value) {
+      document.getElementById("valueText").textContent =
+        Number(value) === 0 ? "休憩なし" : `${value}分`;
+    }
+
+    function onRender(event) {
+      if (!event.data || event.data.type !== "streamlit:render") return;
+
+      const args = event.data.args || {};
+      const slider = document.getElementById("slider");
+
+      slider.min = args.min ?? 0;
+      slider.max = args.max ?? 60;
+      slider.step = args.step ?? 5;
+      slider.value = args.value ?? 60;
+
+      applyTheme(args);
+      updateValueText(slider.value);
+      sendValue(slider.value);
+      setFrameHeight();
+    }
+
+    window.addEventListener("message", onRender);
+
+    const slider = document.getElementById("slider");
+    slider.addEventListener("input", (e) => {
+      updateValueText(e.target.value);
+      sendValue(e.target.value);
+    });
+
+    window.addEventListener("load", setFrameHeight);
+  </script>
+</body>
+</html>
