@@ -165,6 +165,10 @@ st.markdown(f"""
 <style>
 
 /* ===== 休憩スライダー ===== */
+/* スライダーの目盛り（謎の点）完全削除 */
+div[data-testid="stSlider"] [data-baseweb="slider"] svg {{
+    display: none !important;
+}}
 
 /* ラベル文字 */
 div[data-testid="stSlider"] label,
