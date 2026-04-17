@@ -4,7 +4,7 @@ from datetime import datetime, timedelta, timezone
 from streamlit_gsheets import GSheetsConnection
 import os
 import io
-
+from break_slider import break_slider
 # ==========================================
 # 1. ページ設定と時間判定
 # ==========================================
@@ -161,47 +161,6 @@ st.markdown(f"""
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown(f"""
-<style>
-/* ===== 休憩スライダー ===== */
-
-/* ラベル文字 */
-div[data-testid="stSlider"] label,
-div[data-testid="stSlider"] p {{
-    color: {disp_text} !important;
-}}
-
-/* 標準の目盛り文字は消す */
-div[data-testid="stSlider"] [data-baseweb="slider"] span {{
-    display: none !important;
-}}
-
-/* スライダー本体の線 */
-div[data-testid="stSlider"] [data-baseweb="slider"] > div > div {{
-    background: linear-gradient(90deg,
-        #ffeb3b,
-        #ff9800,
-        #f44336,
-        #e91e63,
-        #3f51b5
-    ) !important;
-    border-radius: 999px !important;
-    height: 4px !important;
-}}
-
-/* 上に重なる進行バーを透明化 */
-div[data-testid="stSlider"] [data-baseweb="slider"] div[style*="width"] {{
-    background: transparent !important;
-}}
-
-/* つまみ */
-div[data-testid="stSlider"] div[role="slider"] {{
-    background: #ffffff !important;
-    border: 2px solid #e91e63 !important;
-    box-shadow: 0 0 8px rgba(233, 30, 99, 0.25) !important;
-}}
-</style>
-""", unsafe_allow_html=True)
 # ==========================================
 # 3. 時計＆星セクション
 # ==========================================
@@ -387,41 +346,15 @@ def save_to_gsheets(name, action, break_minutes=0):
     out_df = df[["日付", "出勤", "退勤", "休憩(分)"]].copy()
     conn.update(spreadsheet=URL, worksheet=name, data=out_df)
 
-selected_break = st.slider(
-    "今日の休憩時間",
+selected_break = break_slider(
+    label="今日の休憩時間",
     min_value=0,
     max_value=60,
     step=5,
-    value=60
+    value=60,
+    text_color=disp_text,
+    key="break_slider",
 )
-st.components.v1.html("""
-<script>
-(function() {
-  const doc = window.parent.document;
-
-  function killSliderHoverStuff() {
-    // スライダーのつまみに付くブラウザ標準tooltip候補を消す
-    doc.querySelectorAll('div[data-testid="stSlider"] div[role="slider"]').forEach(el => {
-      el.removeAttribute("title");
-      el.removeAttribute("aria-valuetext");
-    });
-
-    // BaseWeb / Streamlit 側の hover 表示を消す
-    doc.querySelectorAll('[role="tooltip"], [data-baseweb="tooltip"], [data-baseweb="popover"]').forEach(el => {
-      el.remove();
-    });
-
-    // hover時に出るSVGやマーク系を消す
-    doc.querySelectorAll('div[data-testid="stSlider"] svg').forEach(el => {
-      el.style.display = "none";
-    });
-  }
-
-  killSliderHoverStuff();
-  setInterval(killSliderHoverStuff, 300);
-})();
-</script>
-""", height=0)
 
 if selected_break == 0:
     st.caption("休憩なし")
