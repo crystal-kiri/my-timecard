@@ -158,8 +158,12 @@ st.markdown(f"""
 [data-testid="stHeader"] {{ display: none !important; }}
 [data-testid="stToast"] {{ display: none !important; }}
 .stSpinner {{ display: none !important; }}
+</style>
+""", unsafe_allow_html=True)
+
 st.markdown(f"""
 <style>
+
 /* ===== 休憩スライダー ===== */
 
 /* ラベル文字 */
@@ -199,11 +203,11 @@ div[data-testid="stSlider"] div[role="slider"] {{
     box-shadow: 0 0 8px rgba(233, 30, 99, 0.25) !important;
 }}
 
-/* 0 と 60 の数字の色 */
+/* 数字 */
 div[data-testid="stSlider"] [data-baseweb="slider"] span {{
     color: {disp_text} !important;
-    font-weight: 500 !important;
 }}
+
 </style>
 """, unsafe_allow_html=True)
 # ==========================================
