@@ -150,17 +150,26 @@ st.markdown(f"""
     </style>
     """, unsafe_allow_html=True)
 
-st.markdown("""
+st.markdown(f"""
 <style>
-[data-testid="stStatusWidget"] { display: none !important; }
-[data-testid="stDecoration"] { display: none !important; }
-[data-testid="stToolbar"] { display: none !important; }
-[data-testid="stHeader"] { display: none !important; }
-[data-testid="stToast"] { display: none !important; }
-.stSpinner { display: none !important; }
+[data-testid="stStatusWidget"] {{ display: none !important; }}
+[data-testid="stDecoration"] {{ display: none !important; }}
+[data-testid="stToolbar"] {{ display: none !important; }}
+[data-testid="stHeader"] {{ display: none !important; }}
+[data-testid="stToast"] {{ display: none !important; }}
+.stSpinner {{ display: none !important; }}
 
 /* ===== 休憩スライダー ===== */
-div[data-testid="stSlider"] [data-baseweb="slider"] > div > div {
+
+/* ラベル文字 */
+div[data-testid="stSlider"] label,
+div[data-testid="stSlider"] p,
+div[data-testid="stSlider"] span {{
+    color: {disp_text} !important;
+}}
+
+/* スライダー本体の線 */
+div[data-testid="stSlider"] [data-baseweb="slider"] > div > div {{
     background: linear-gradient(90deg,
         #ffeb3b,
         #ff9800,
@@ -168,20 +177,53 @@ div[data-testid="stSlider"] [data-baseweb="slider"] > div > div {
         #e91e63,
         #3f51b5
     ) !important;
-    height: 4px !important;
     border-radius: 999px !important;
-}
+    height: 4px !important;
+}}
 
-/* ===== 上に乗ってる進行バーを消す ===== */
-div[data-testid="stSlider"] [data-baseweb="slider"] div[style*="width"] {
+/* 上に重なる進行バーを透明化 */
+div[data-testid="stSlider"] [data-baseweb="slider"] div[style*="width"] {{
     background: transparent !important;
-}
+}}
 
-div[data-testid="stSlider"] div[role="slider"] {
+/* つまみ */
+div[data-testid="stSlider"] div[role="slider"] {{
     background: #ffffff !important;
-    border: 3px solid #e91e63 !important;
-    box-shadow: 0 0 10px rgba(233, 30, 99, 0.35) !important;
-}
+    border: 2px solid #e91e63 !important;
+    box-shadow: 0 0 8px rgba(233, 30, 99, 0.25) !important;
+}}
+
+/* 0 と 60 の数字の色 */
+div[data-testid="stSlider"] [data-baseweb="slider"] span {{
+    color: {disp_text} !important;
+    font-weight: 500 !important;
+}}
+
+/* 左右の点 */
+div[data-testid="stSlider"] [data-baseweb="slider"] {{
+    position: relative;
+}}
+
+div[data-testid="stSlider"] [data-baseweb="slider"]::before,
+div[data-testid="stSlider"] [data-baseweb="slider"]::after {{
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: {disp_text} !important;
+}}
+
+div[data-testid="stSlider"] [data-baseweb="slider"]::before {{
+    left: 0;
+    transform: translateX(0);
+}}
+
+div[data-testid="stSlider"] [data-baseweb="slider"]::after {{
+    right: 0;
+    transform: translateX(0);
+}}
 </style>
 """, unsafe_allow_html=True)
 # ==========================================
