@@ -158,8 +158,6 @@ st.markdown(f"""
 [data-testid="stHeader"] {{ display: none !important; }}
 [data-testid="stToast"] {{ display: none !important; }}
 .stSpinner {{ display: none !important; }}
-
-/* ===== 休憩スライダー ===== */
 st.markdown(f"""
 <style>
 /* ===== 休憩スライダー ===== */
