@@ -124,61 +124,68 @@
   </div>
 
   <script>
-    function sendValue(value) {
-      const payload = {
-        isStreamlitMessage: true,
-        type: "streamlit:setComponentValue",
-        value: Number(value)
-      };
-      window.parent.postMessage(payload, "*");
-    }
+  function sendMessageToStreamlit(type, data) {
+    const outData = Object.assign({
+      isStreamlitMessage: true,
+      type: type,
+    }, data);
+    window.parent.postMessage(outData, "*");
+  }
 
-    function setFrameHeight() {
-      const payload = {
-        isStreamlitMessage: true,
-        type: "streamlit:setFrameHeight",
-        height: document.documentElement.scrollHeight
-      };
-      window.parent.postMessage(payload, "*");
-    }
+  function init() {
+    // これがないと component timeout になりやすい
+    sendMessageToStreamlit("streamlit:componentReady", { apiVersion: 1 });
+    setFrameHeight();
+  }
 
-    function applyTheme(args) {
-      const root = document.documentElement;
-      root.style.setProperty("--text-color", args.textColor || "#454444");
-      document.getElementById("title").textContent = args.label || "今日の休憩時間";
-    }
-
-    function updateValueText(value) {
-      document.getElementById("valueText").textContent =
-        Number(value) === 0 ? "休憩なし" : `${value}分`;
-    }
-
-    function onRender(event) {
-      if (!event.data || event.data.type !== "streamlit:render") return;
-
-      const args = event.data.args || {};
-      const slider = document.getElementById("slider");
-
-      slider.min = args.min ?? 0;
-      slider.max = args.max ?? 60;
-      slider.step = args.step ?? 5;
-      slider.value = args.value ?? 60;
-
-      applyTheme(args);
-      updateValueText(slider.value);
-      sendValue(slider.value);
-      setFrameHeight();
-    }
-
-    window.addEventListener("message", onRender);
-
-    const slider = document.getElementById("slider");
-    slider.addEventListener("input", (e) => {
-      updateValueText(e.target.value);
-      sendValue(e.target.value);
+  function setFrameHeight() {
+    sendMessageToStreamlit("streamlit:setFrameHeight", {
+      height: document.documentElement.scrollHeight
     });
+  }
 
-    window.addEventListener("load", setFrameHeight);
-  </script>
+  function setComponentValue(value) {
+    sendMessageToStreamlit("streamlit:setComponentValue", {
+      value: Number(value)
+    });
+  }
+
+  function applyTheme(args) {
+    const root = document.documentElement;
+    root.style.setProperty("--text-color", args.textColor || "#454444");
+    document.getElementById("title").textContent = args.label || "今日の休憩時間";
+  }
+
+  function updateValueText(value) {
+    document.getElementById("valueText").textContent =
+      Number(value) === 0 ? "休憩なし" : `${value}分`;
+  }
+
+  function onRender(event) {
+    if (!event.data || event.data.type !== "streamlit:render") return;
+
+    const args = event.data.args || {};
+    const slider = document.getElementById("slider");
+
+    slider.min = args.min ?? 0;
+    slider.max = args.max ?? 60;
+    slider.step = args.step ?? 5;
+    slider.value = args.value ?? 60;
+
+    applyTheme(args);
+    updateValueText(slider.value);
+    setFrameHeight();
+  }
+
+  window.addEventListener("message", onRender);
+
+  const slider = document.getElementById("slider");
+  slider.addEventListener("input", (e) => {
+    updateValueText(e.target.value);
+    setComponentValue(e.target.value);
+  });
+
+  window.addEventListener("load", init);
+</script>
 </body>
 </html>
