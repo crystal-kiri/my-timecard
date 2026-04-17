@@ -308,12 +308,18 @@ def save_to_gsheets(name, action, break_minutes=0):
     df["休憩(分)"] = df["休憩(分)"].astype("Int64")
 
     today_rows = df[df["日付"] == today]
+    if action == "退勤" and today_rows.empty:
+    st.error("先に出勤を押してください")
+    return
 
     if not today_rows.empty:
         idx = today_rows.index[-1]
         if action == "出勤":
             df.loc[idx, "出勤"] = time_str
         else:
+            if pd.notna(df.loc[idx, "退勤"]):
+                st.warning("すでに退勤済みです")
+                return
             df.loc[idx, "退勤"] = time_str
             df.loc[idx, "休憩(分)"] = break_minutes
     else:
