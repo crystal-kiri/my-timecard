@@ -270,9 +270,26 @@ st.components.v1.html(f"""
 # ==========================================
 try:
     df_members = conn.read(spreadsheet=URL, worksheet="スタッフ名簿", ttl=0)
-    names = df_members['名前'].tolist()
-except Exception:
-    names = ["スタッフA", "スタッフB"]
+
+    if df_members is None or df_members.empty or "名前" not in df_members.columns:
+        st.error("スタッフ名簿が空か、名前列がありません")
+        st.stop()
+
+    names = (
+        df_members["名前"]
+        .dropna()
+        .astype(str)
+        .str.strip()
+        .tolist()
+    )
+
+    if not names:
+        st.error("スタッフ名簿に名前がありません")
+        st.stop()
+
+except Exception as e:
+    st.error(f"スタッフ名簿の読み込みに失敗しました: {e}")
+    st.stop()
 
 st.markdown(
     f'<div style="color:{disp_text}; text-align:center; letter-spacing:0.2em; font-size:22px; margin:10px 0;">TIME CARD</div>',
