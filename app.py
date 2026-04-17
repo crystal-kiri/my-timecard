@@ -468,29 +468,6 @@ with st.expander("🛠 管理者メニュー"):
                             st.session_state.delete_confirm = False
                             st.rerun()
 
-st.markdown("""
-    <style>
-    div[data-testid="stExpander"] button[kind="secondary"],
-    div[data-testid="stExpander"] button[kind="primary"] {
-        width: 100% !important;
-        height: 50px !important;
-        background-color: transparent !important;
-        font-size: 16px !important;
-        border: 1px solid !important;
-        border-image: linear-gradient(90deg, #ffeb3b, #ff9800, #f44336, #e91e63, #3f51b5) 1 !important;
-        clip-path: polygon(10px 0%, calc(100% - 10px) 0%, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0% calc(100% - 10px), 0% 10px) !important;
-        margin-top: 10px !important;
-    }
-
-    div[data-testid="stExpander"] div[data-baseweb="input"] button {
-        clip-path: none !important;
-        border: none !important;
-        border-image: none !important;
-        height: auto !important;
-        width: auto !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
 
 
     
