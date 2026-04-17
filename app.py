@@ -165,24 +165,15 @@ st.markdown(f"""
 <style>
 /* ===== 休憩スライダー ===== */
 
-/* ラベル文字 */
-div[data-testid="stSlider"] label,
-div[data-testid="stSlider"] p {{
+/* ラベル */
+div[data-testid="stSelectSlider"] label,
+div[data-testid="stSelectSlider"] p,
+div[data-testid="stSelectSlider"] span {{
     color: {disp_text} !important;
 }}
 
-/* 標準の数字・tick・hover表示を全部消す */
-div[data-testid="stSlider"] [data-baseweb="slider"] span,
-div[data-testid="stSlider"] [data-baseweb="slider"] svg,
-div[data-testid="stSlider"] [data-baseweb="slider"] div[aria-hidden="true"],
-div[data-testid="stSlider"] [role="tooltip"],
-div[data-testid="stSlider"] [data-baseweb="tooltip"],
-div[data-testid="stSlider"] [data-baseweb="popover"] {{
-    display: none !important;
-}}
-
-/* スライダー本体の線 */
-div[data-testid="stSlider"] [data-baseweb="slider"] > div > div {{
+/* 線 */
+div[data-testid="stSelectSlider"] [data-baseweb="slider"] > div > div {{
     background: linear-gradient(90deg,
         #ffeb3b,
         #ff9800,
@@ -194,29 +185,22 @@ div[data-testid="stSlider"] [data-baseweb="slider"] > div > div {{
     height: 4px !important;
 }}
 
-/* 上に重なる進行バーを透明化 */
-div[data-testid="stSlider"] [data-baseweb="slider"] div[style*="width"] {{
+/* 進行バーを透明化 */
+div[data-testid="stSelectSlider"] [data-baseweb="slider"] div[style*="width"] {{
     background: transparent !important;
 }}
 
 /* つまみ */
-div[data-testid="stSlider"] div[role="slider"] {{
+div[data-testid="stSelectSlider"] div[role="slider"] {{
     background: #ffffff !important;
     border: 2px solid #e91e63 !important;
     box-shadow: 0 0 8px rgba(233, 30, 99, 0.25) !important;
 }}
 
-/* 自作の左右数字 */
-.break-scale {{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: -6px;
-    padding: 0 2px;
-    color: {disp_text};
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1;
+/* 目盛り文字 */
+div[data-testid="stSelectSlider"] [data-baseweb="slider"] span {{
+    color: {disp_text} !important;
+    font-weight: 500 !important;
 }}
 </style>
 """, unsafe_allow_html=True)
@@ -405,14 +389,12 @@ def save_to_gsheets(name, action, break_minutes=0):
     out_df = df[["日付", "出勤", "退勤", "休憩(分)"]].copy()
     conn.update(spreadsheet=URL, worksheet=name, data=out_df)
 
-selected_break = st.slider(
+selected_break = st.select_slider(
     "今日の休憩時間",
-    min_value=0,
-    max_value=60,
-    step=5,
+    options=list(range(0, 65, 5)),
     value=60
 )
-st.markdown('<div class="break-scale"><span>0</span><span>60</span></div>', unsafe_allow_html=True)
+
 if selected_break == 0:
     st.caption("休憩なし")
 c1, c2 = st.columns(2)
