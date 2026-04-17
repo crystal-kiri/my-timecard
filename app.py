@@ -161,6 +161,15 @@ st.markdown(f"""
 </style>
 """, unsafe_allow_html=True)
 
+st.markdown(f"""
+<style>
+/* 氏名selectの入力カーソルを消す */
+div[data-testid="stSelectbox"] input {{
+    caret-color: transparent !important;
+}}
+</style>
+""", unsafe_allow_html=True)
+
 # ==========================================
 # 3. 時計＆星セクション
 # ==========================================
@@ -286,6 +295,45 @@ st.markdown(
 )
 
 selected_name = st.selectbox("USER", names, label_visibility="collapsed")
+
+st.components.v1.html("""
+<script>
+(function() {
+  const doc = window.parent.document;
+
+  function lockSelectboxTyping() {
+    const selectInputs = doc.querySelectorAll('div[data-testid="stSelectbox"] input');
+
+    selectInputs.forEach((input) => {
+      input.setAttribute("readonly", "readonly");
+      input.setAttribute("inputmode", "none");
+      input.setAttribute("autocomplete", "off");
+      input.setAttribute("autocorrect", "off");
+      input.setAttribute("autocapitalize", "off");
+      input.setAttribute("spellcheck", "false");
+
+      input.addEventListener("keydown", (e) => {
+        const allowed = ["ArrowUp", "ArrowDown", "Enter", "Escape", "Tab"];
+        if (!allowed.includes(e.key)) {
+          e.preventDefault();
+        }
+      });
+
+      input.addEventListener("beforeinput", (e) => {
+        e.preventDefault();
+      });
+
+      input.addEventListener("input", () => {
+        input.value = "";
+      });
+    });
+  }
+
+  lockSelectboxTyping();
+  setInterval(lockSelectboxTyping, 500);
+})();
+</script>
+""", height=0)
 
 if 'msg' not in st.session_state:
     st.session_state.msg = "打刻してください"
