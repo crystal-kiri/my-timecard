@@ -606,17 +606,25 @@ if is_night:
     }
 
     .stApp::after {
-        content: "";
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        background:
-            radial-gradient(ellipse 32% 14% at 18% 20%, rgba(255,255,255,0.10), transparent 72%),
-            radial-gradient(ellipse 28% 12% at 55% 16%, rgba(255,255,255,0.08), transparent 72%),
-            radial-gradient(ellipse 34% 15% at 88% 22%, rgba(255,255,255,0.07), transparent 72%);
-        opacity: 0.9;
-        animation: cloudMove 18s ease-in-out infinite alternate;
-        z-index: 0;
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse 18% 10% at 12% 18%, rgba(255,255,255,0.10), transparent 70%),
+        radial-gradient(ellipse 14% 8% at 20% 20%, rgba(255,255,255,0.08), transparent 70%),
+        radial-gradient(ellipse 20% 11% at 28% 17%, rgba(255,255,255,0.10), transparent 70%),
+
+        radial-gradient(ellipse 16% 9% at 52% 14%, rgba(255,255,255,0.09), transparent 70%),
+        radial-gradient(ellipse 12% 7% at 60% 16%, rgba(255,255,255,0.07), transparent 70%),
+        radial-gradient(ellipse 18% 10% at 68% 13%, rgba(255,255,255,0.09), transparent 70%),
+
+        radial-gradient(ellipse 20% 11% at 82% 22%, rgba(255,255,255,0.08), transparent 70%),
+        radial-gradient(ellipse 14% 8% at 90% 24%, rgba(255,255,255,0.06), transparent 70%);
+
+    opacity: 1;
+    animation: cloudMove 28s ease-in-out infinite alternate;
+    z-index: 0;
     }
 
     @keyframes twinkle {
