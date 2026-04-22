@@ -566,7 +566,6 @@ div[data-testid="stExpander"] div[data-baseweb="input"] button {
 </style>
 """
 
-st.markdown(expander_css, unsafe_allow_html=True)
 
 if is_night:
     st.markdown("""
