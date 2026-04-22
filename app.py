@@ -42,61 +42,10 @@ st.markdown(f"""
 
 /* 基本背景とコンテナ */
 .stApp {{
-    {"background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%) !important;" if is_night else f"background-color: {bg_color} !important;"}
+    background-color: {bg_color} !important;
     font-family: 'Noto Sans JP', sans-serif;
-    position: relative;
-    overflow: hidden;
-}}
-{"" if not is_night else """
-
-.stApp::before {
-    content: "";
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    background:
-        radial-gradient(2px 2px at 20% 30%, white, transparent),
-        radial-gradient(1.5px 1.5px at 70% 60%, white, transparent),
-        radial-gradient(2px 2px at 40% 80%, white, transparent),
-        radial-gradient(1px 1px at 90% 20%, white, transparent);
-    opacity: 0.6;
-    animation: twinkle 4s infinite alternate;
-    z-index: 0;
-}
-
-@keyframes twinkle {
-    from { opacity: 0.3; }
-    to { opacity: 0.8; }
-}
-
-.stApp::after {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: -50%;
-    width: 200%;
-    height: 100%;
-    pointer-events: none;
-    background: radial-gradient(
-        ellipse at 50% 50%,
-        rgba(255,255,255,0.05),
-        transparent 70%
-    );
-    animation: cloudMove 60s linear infinite;
-    z-index: 0;
-}
-
-@keyframes cloudMove {
-    from { transform: translateX(0); }
-    to { transform: translateX(50%); }
-}
-.stApp > div {{
-    position: relative;
-    z-index: 1;
 }}
 
-"""}
 
 [data-testid="stAppViewBlockContainer"] {{
     max-width: 500px !important;
