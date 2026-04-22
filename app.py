@@ -575,23 +575,28 @@ if is_night:
         pointer-events: none;
         background:
 
-            /* 左の小さめ雲 */
-            radial-gradient(circle at 18% 18%, rgba(255,255,255,0.12) 0%, transparent 40%),
-            radial-gradient(circle at 22% 20%, rgba(255,255,255,0.10) 0%, transparent 40%),
-            radial-gradient(circle at 26% 18%, rgba(255,255,255,0.12) 0%, transparent 40%),
+            /* 左の雲 */
+            radial-gradient(circle at 20% 18%, rgba(255,255,255,0.20) 0%, transparent 45%),
+            radial-gradient(circle at 24% 20%, rgba(255,255,255,0.18) 0%, transparent 45%),
+            radial-gradient(circle at 28% 18%, rgba(255,255,255,0.20) 0%, transparent 45%),
 
-            /* 右の小さめ雲 */
-            radial-gradient(circle at 78% 22%, rgba(255,255,255,0.11) 0%, transparent 40%),
-            radial-gradient(circle at 82% 24%, rgba(255,255,255,0.09) 0%, transparent 40%);
+            /* 真ん中の雲 */
+            radial-gradient(circle at 55% 15%, rgba(255,255,255,0.18) 0%, transparent 45%),
+            radial-gradient(circle at 60% 17%, rgba(255,255,255,0.16) 0%, transparent 45%),
 
-        opacity: 0.7;
-        animation: cloudMove 45s ease-in-out infinite alternate;
+            /* 右の雲 */
+            radial-gradient(circle at 85% 22%, rgba(255,255,255,0.17) 0%, transparent 45%),
+            radial-gradient(circle at 90% 24%, rgba(255,255,255,0.15) 0%, transparent 45%);
+
+        opacity: 0.9;
+        animation: cloudMove 60s ease-in-out infinite alternate;
         z-index: 0.5;
+        filter: blur(6px);
     }
 
     @keyframes cloudMove {
         from { transform: translateX(0); }
-        to { transform: translateX(3%); }
+        to { transform: translateX(2%); }
     }
 
     .stApp > div {
