@@ -569,9 +569,8 @@ div[data-testid="stExpander"] div[data-baseweb="input"] button {
 st.markdown(expander_css, unsafe_allow_html=True)
 
 if is_night:
-    st.markdown('<div class="shooting-star"></div>', unsafe_allow_html=True)
+    st.markdown("""
     <style>
-
     .stApp {
         background:
             radial-gradient(circle at 20% 10%, rgba(120, 140, 255, 0.18), transparent 28%),
@@ -581,52 +580,53 @@ if is_night:
         overflow: hidden;
     }
 
-    
     .shooting-star {
-    position: fixed;
-    top: 15%;
-    left: 25%;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: white;
-    box-shadow: 0 0 6px white, 0 0 12px rgba(255,255,255,0.8);
-    pointer-events: none;
-    z-index: 10;
-    opacity: 0;
-    transform: rotate(45deg);
-    animation: shooting 7s ease-in-out infinite;
-}
+        position: fixed;
+        top: 15%;
+        left: 25%;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: white;
+        box-shadow: 0 0 6px white, 0 0 12px rgba(255,255,255,0.8);
+        pointer-events: none;
+        z-index: 10;
+        opacity: 0;
+        transform: rotate(45deg);
+        animation: shooting 7s ease-in-out infinite;
+    }
 
-.shooting-star::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -60px;
-    width: 60px;
-    height: 2px;
-    background: linear-gradient(to right, transparent, white);
-}
+    .shooting-star::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -60px;
+        width: 60px;
+        height: 2px;
+        background: linear-gradient(to right, transparent, white);
+    }
 
-@keyframes shooting {
-    0% {
-        transform: translate(0, 0) rotate(45deg);
-        opacity: 0;
+    @keyframes shooting {
+        0% {
+            transform: translate(0, 0) rotate(45deg);
+            opacity: 0;
+        }
+        5% {
+            opacity: 0;
+        }
+        10% {
+            opacity: 1;
+        }
+        18% {
+            transform: translate(200px, 200px) rotate(45deg);
+            opacity: 0;
+        }
+        100% {
+            opacity: 0;
+        }
     }
-    5% {
-        opacity: 0;
-    }
-    10% {
-        opacity: 1;
-    }
-    18% {
-        transform: translate(200px, 200px) rotate(45deg);
-        opacity: 0;
-    }
-    100% {
-        opacity: 0;
-    }
-}
-
     </style>
     """, unsafe_allow_html=True)
+
+    st.markdown('<div class="shooting-star"></div>', unsafe_allow_html=True)
+
