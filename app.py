@@ -339,8 +339,8 @@ def calc_work_duration(start_str, end_str, break_minutes):
         return None
 
     try:
-        start_dt = datetime.strptime(str(start_str), "%H:%M:%S")
-        end_dt = datetime.strptime(str(end_str), "%H:%M:%S")
+        start_dt = datetime.strptime(str(start_str), "%H:%M")
+        end_dt = datetime.strptime(str(end_str), "%H:%M")
         break_minutes = int(break_minutes) if pd.notna(break_minutes) else 0
 
         total_minutes = int((end_dt - start_dt).total_seconds() // 60) - break_minutes
