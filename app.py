@@ -573,7 +573,10 @@ if is_night:
     <style>
 
     .stApp {
-        background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%) !important;
+        background:
+            radial-gradient(circle at 20% 10%, rgba(120, 140, 255, 0.18), transparent 28%),
+            radial-gradient(circle at 80% 18%, rgba(255, 255, 255, 0.08), transparent 22%),
+            linear-gradient(180deg, #08111f 0%, #13233d 55%, #1a2741 100%) !important;
         position: relative;
         overflow: hidden;
     }
@@ -584,12 +587,21 @@ if is_night:
         inset: 0;
         pointer-events: none;
         background:
-            radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.8), transparent 60%),
-            radial-gradient(1.5px 1.5px at 70% 60%, rgba(255,255,255,0.7), transparent 60%),
-            radial-gradient(2px 2px at 40% 80%, rgba(255,255,255,0.75), transparent 60%),
-            radial-gradient(1px 1px at 90% 20%, rgba(255,255,255,0.7), transparent 60%);
-        opacity: 0.6;
-        animation: twinkle 4s ease-in-out infinite alternate;
+            radial-gradient(2px 2px at 8% 12%, rgba(255,255,255,0.95), transparent 55%),
+            radial-gradient(2px 2px at 18% 28%, rgba(255,255,255,0.9), transparent 55%),
+            radial-gradient(1.5px 1.5px at 30% 18%, rgba(255,255,255,0.85), transparent 55%),
+            radial-gradient(2px 2px at 42% 10%, rgba(255,255,255,0.95), transparent 55%),
+            radial-gradient(1.5px 1.5px at 58% 24%, rgba(255,255,255,0.9), transparent 55%),
+            radial-gradient(2px 2px at 72% 14%, rgba(255,255,255,0.95), transparent 55%),
+            radial-gradient(1.5px 1.5px at 84% 22%, rgba(255,255,255,0.85), transparent 55%),
+            radial-gradient(2px 2px at 92% 9%, rgba(255,255,255,0.95), transparent 55%),
+            radial-gradient(1px 1px at 12% 44%, rgba(255,255,255,0.7), transparent 60%),
+            radial-gradient(1px 1px at 26% 52%, rgba(255,255,255,0.65), transparent 60%),
+            radial-gradient(1px 1px at 47% 40%, rgba(255,255,255,0.7), transparent 60%),
+            radial-gradient(1px 1px at 63% 48%, rgba(255,255,255,0.65), transparent 60%),
+            radial-gradient(1px 1px at 79% 42%, rgba(255,255,255,0.7), transparent 60%);
+        opacity: 0.95;
+        animation: twinkle 3.2s ease-in-out infinite alternate;
         z-index: 0;
     }
 
@@ -599,20 +611,22 @@ if is_night:
         inset: 0;
         pointer-events: none;
         background:
-            radial-gradient(ellipse 30% 12% at 20% 18%, rgba(255,255,255,0.05), transparent 70%),
-            radial-gradient(ellipse 26% 10% at 70% 28%, rgba(255,255,255,0.04), transparent 70%);
+            radial-gradient(ellipse 32% 14% at 18% 20%, rgba(255,255,255,0.10), transparent 72%),
+            radial-gradient(ellipse 28% 12% at 55% 16%, rgba(255,255,255,0.08), transparent 72%),
+            radial-gradient(ellipse 34% 15% at 88% 22%, rgba(255,255,255,0.07), transparent 72%);
+        opacity: 0.9;
+        animation: cloudMove 18s ease-in-out infinite alternate;
         z-index: 0;
-        animation: cloudMove 50s linear infinite alternate;
     }
 
     @keyframes twinkle {
-        from { opacity: 0.35; }
-        to { opacity: 0.75; }
+        from { opacity: 0.55; }
+        to { opacity: 1; }
     }
 
     @keyframes cloudMove {
         from { transform: translateX(0); }
-        to { transform: translateX(2%); }
+        to { transform: translateX(3%); }
     }
 
     .stApp > div {
