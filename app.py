@@ -37,24 +37,12 @@ URL = "https://docs.google.com/spreadsheets/d/1muQ7GR7RbVtOBYS3nV-xy7VCq66QqE04T
 # 2. CSSデザイン (ボタン・メッセージ・全体)
 # ==========================================
 st.markdown(f"""
-
 <style>
 
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&display=swap');
-
-
-
-/* 基本背景とコンテナ */
-
 .stApp {{
-
-​    {"background: linear-gradient(180deg, #161445 0%, #0b0f2a 60%, #020617 100%) !important;" if is_night else f"background-color: {bg_color} !important;"}
-
-​    font-family: 'Noto Sans JP', sans-serif;
-
+    {"background: linear-gradient(180deg, #161445 0%, #0b0f2a 60%, #020617 100%) !important;" if is_night else f"background-color: {bg_color} !important;"}
+    font-family: 'Noto Sans JP', sans-serif;
 }}
-
-
 
 
 [data-testid="stAppViewBlockContainer"] {{
