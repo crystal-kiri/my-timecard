@@ -612,24 +612,24 @@ if is_night:
     pointer-events: none;
     background:
 
-        /* 左の雲 */
-        radial-gradient(ellipse 22% 12% at 18% 20%, rgba(255,255,255,0.16), transparent 70%),
-        radial-gradient(ellipse 16% 9% at 25% 22%, rgba(255,255,255,0.12), transparent 70%),
-        radial-gradient(ellipse 20% 11% at 30% 18%, rgba(255,255,255,0.14), transparent 70%),
+        /* かわいい雲① */
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.18) 0%, transparent 60%),
+        radial-gradient(circle at 24% 22%, rgba(255,255,255,0.16) 0%, transparent 60%),
+        radial-gradient(circle at 28% 20%, rgba(255,255,255,0.18) 0%, transparent 60%),
 
-        /* 真ん中の雲 */
-        radial-gradient(ellipse 20% 11% at 55% 15%, rgba(255,255,255,0.15), transparent 70%),
-        radial-gradient(ellipse 14% 8% at 60% 17%, rgba(255,255,255,0.11), transparent 70%),
-        radial-gradient(ellipse 18% 10% at 65% 13%, rgba(255,255,255,0.13), transparent 70%),
+        /* かわいい雲② */
+        radial-gradient(circle at 60% 18%, rgba(255,255,255,0.17) 0%, transparent 60%),
+        radial-gradient(circle at 64% 20%, rgba(255,255,255,0.15) 0%, transparent 60%),
+        radial-gradient(circle at 68% 18%, rgba(255,255,255,0.17) 0%, transparent 60%),
 
-        /* 右の雲 */
-        radial-gradient(ellipse 22% 12% at 85% 22%, rgba(255,255,255,0.14), transparent 70%),
-        radial-gradient(ellipse 16% 9% at 92% 24%, rgba(255,255,255,0.10), transparent 70%);
+        /* かわいい雲③ */
+        radial-gradient(circle at 85% 25%, rgba(255,255,255,0.16) 0%, transparent 60%),
+        radial-gradient(circle at 90% 27%, rgba(255,255,255,0.14) 0%, transparent 60%);
 
     opacity: 1;
-    animation: cloudMove 35s ease-in-out infinite alternate;
+    animation: cloudMove 40s ease-in-out infinite alternate;
     z-index: 0;
-    }
+}
 
     @keyframes twinkle {
         from { opacity: 0.55; }
