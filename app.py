@@ -36,15 +36,25 @@ URL = "https://docs.google.com/spreadsheets/d/1muQ7GR7RbVtOBYS3nV-xy7VCq66QqE04T
 # ==========================================
 # 2. CSSデザイン (ボタン・メッセージ・全体)
 # ==========================================
-url = "https://raw.githubusercontent.com/crystal-kiri/my-timecard/main/kirikirikiri__--ar_169_--v_7_e1468408-1bb0-4fea-893b-12a8309030ce_2.png"
-
 st.markdown(f"""
+
 <style>
 
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&display=swap');
+
+
+
+/* 基本背景とコンテナ */
+
 .stApp {{
-    {"background: linear-gradient(180deg, #161445 0%, #0b0f2a 60%, #020617 100%), url('" + url + "') !important;" if is_night else f"background-color: {bg_color} !important;"}
-    font-family: 'Noto Sans JP', sans-serif;
+
+​    {"background: linear-gradient(180deg, #161445 0%, #0b0f2a 60%, #020617 100%) !important;" if is_night else f"background-color: {bg_color} !important;"}
+
+​    font-family: 'Noto Sans JP', sans-serif;
+
 }}
+
+
 
 
 [data-testid="stAppViewBlockContainer"] {{
