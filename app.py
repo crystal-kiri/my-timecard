@@ -16,7 +16,7 @@ is_night = (now.hour >= 17 or now.hour < 8)
 MAIN_GRAY = "#454444"
 
 if is_night:
-    bg_color = "#605D86"      # 深いネイビー
+    bg_color = "#0d0782"      # 深いネイビー
     disp_text = "#FDFBF9"     # 少し柔らかい白（真っ白より目に優しい）
     box_bg = "rgba(255, 255, 255, 0.06)"
     clock_col = "#e6eaf2"
