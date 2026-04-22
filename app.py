@@ -47,7 +47,7 @@ st.markdown(f"""
     position: relative;
     overflow: hidden;
 }}
-{{"" if not is_night else """
+{"" if not is_night else """
 
 .stApp::before {
     content: "";
@@ -92,7 +92,7 @@ st.markdown(f"""
     to { transform: translateX(50%); }
 }
 
-"""}}
+"""}
 
 [data-testid="stAppViewBlockContainer"] {{
     max-width: 500px !important;
