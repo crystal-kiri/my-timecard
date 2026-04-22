@@ -569,7 +569,7 @@ div[data-testid="stExpander"] div[data-baseweb="input"] button {
 st.markdown(expander_css, unsafe_allow_html=True)
 
 if is_night:
-    st.markdown("""
+    st.markdown('<div class="shooting-star"></div>', unsafe_allow_html=True)
     <style>
 
     .stApp {
@@ -581,131 +581,50 @@ if is_night:
         overflow: hidden;
     }
 
-    .stApp::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        background:
-            radial-gradient(2px 2px at 8% 12%, rgba(255,255,255,0.95), transparent 55%),
-            radial-gradient(2px 2px at 18% 28%, rgba(255,255,255,0.9), transparent 55%),
-            radial-gradient(1.5px 1.5px at 30% 18%, rgba(255,255,255,0.85), transparent 55%),
-            radial-gradient(2px 2px at 42% 10%, rgba(255,255,255,0.95), transparent 55%),
-            radial-gradient(1.5px 1.5px at 58% 24%, rgba(255,255,255,0.9), transparent 55%),
-            radial-gradient(2px 2px at 72% 14%, rgba(255,255,255,0.95), transparent 55%),
-            radial-gradient(1.5px 1.5px at 84% 22%, rgba(255,255,255,0.85), transparent 55%),
-            radial-gradient(2px 2px at 92% 9%, rgba(255,255,255,0.95), transparent 55%),
-            radial-gradient(1px 1px at 12% 44%, rgba(255,255,255,0.7), transparent 60%),
-            radial-gradient(1px 1px at 26% 52%, rgba(255,255,255,0.65), transparent 60%),
-            radial-gradient(1px 1px at 47% 40%, rgba(255,255,255,0.7), transparent 60%),
-            radial-gradient(1px 1px at 63% 48%, rgba(255,255,255,0.65), transparent 60%),
-            radial-gradient(1px 1px at 79% 42%, rgba(255,255,255,0.7), transparent 60%);
-        opacity: 0.95;
-        animation: twinkle 3.2s ease-in-out infinite alternate;
-        z-index: 0;
-    }
-
-    .stApp::after {
-    content: "";
+    
+    .shooting-star {
     position: fixed;
-    inset: 0;
+    top: 15%;
+    left: 25%;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 0 6px white, 0 0 12px rgba(255,255,255,0.8);
     pointer-events: none;
-    background:
-
-        /* 左の小さめ雲 */
-        radial-gradient(circle at 18% 18%, rgba(255,255,255,0.12) 0%, transparent 40%),
-        radial-gradient(circle at 22% 20%, rgba(255,255,255,0.10) 0%, transparent 40%),
-        radial-gradient(circle at 26% 18%, rgba(255,255,255,0.12) 0%, transparent 40%),
-
-        /* 右の小さめ雲 */
-        radial-gradient(circle at 78% 22%, rgba(255,255,255,0.11) 0%, transparent 40%),
-        radial-gradient(circle at 82% 24%, rgba(255,255,255,0.09) 0%, transparent 40%);
-
-    opacity: 0.7;
-    animation: cloudMove 45s ease-in-out infinite alternate;
-    z-index: 0;
-}
-
-    @keyframes twinkle {
-        from { opacity: 0.55; }
-        to { opacity: 1; }
-    }
-
-    @keyframes cloudMove {
-        from { transform: translateX(0); }
-        to { transform: translateX(3%); }
-    }
-
-    .stApp > div {
-        position: relative;
-        z-index: 1;
-    }
-.stApp::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    background:
-        radial-gradient(2px 2px at 8% 12%, rgba(255,255,255,0.95), transparent 55%),
-        radial-gradient(2px 2px at 18% 28%, rgba(255,255,255,0.9), transparent 55%),
-        radial-gradient(1.5px 1.5px at 30% 18%, rgba(255,255,255,0.85), transparent 55%),
-        radial-gradient(2px 2px at 42% 10%, rgba(255,255,255,0.95), transparent 55%),
-        radial-gradient(1.5px 1.5px at 58% 24%, rgba(255,255,255,0.9), transparent 55%),
-        radial-gradient(2px 2px at 72% 14%, rgba(255,255,255,0.95), transparent 55%),
-        radial-gradient(1.5px 1.5px at 84% 22%, rgba(255,255,255,0.85), transparent 55%),
-        radial-gradient(2px 2px at 92% 9%, rgba(255,255,255,0.95), transparent 55%),
-        radial-gradient(1px 1px at 12% 44%, rgba(255,255,255,0.7), transparent 60%),
-        radial-gradient(1px 1px at 26% 52%, rgba(255,255,255,0.65), transparent 60%),
-        radial-gradient(1px 1px at 47% 40%, rgba(255,255,255,0.7), transparent 60%),
-        radial-gradient(1px 1px at 63% 48%, rgba(255,255,255,0.65), transparent 60%),
-        radial-gradient(1px 1px at 79% 42%, rgba(255,255,255,0.7), transparent 60%);
-    opacity: 0.95;
-    animation: twinkle 3.2s ease-in-out infinite alternate;
-    z-index: 0;
-}
-
-.stApp::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    background:
-        linear-gradient(135deg,
-            transparent 0%,
-            transparent 48%,
-            rgba(255,255,255,0.0) 49%,
-            rgba(255,255,255,0.95) 50%,
-            rgba(255,255,255,0.0) 51%,
-            transparent 52%,
-            transparent 100%);
-    background-size: 220px 220px;
-    background-repeat: no-repeat;
-    background-position: -250px -250px;
+    z-index: 10;
     opacity: 0;
-    z-index: 0;
-    animation: shootingStar 9s linear infinite;
+    transform: rotate(45deg);
+    animation: shooting 7s ease-in-out infinite;
 }
 
-@keyframes shootingStar {
+.shooting-star::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -60px;
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(to right, transparent, white);
+}
+
+@keyframes shooting {
     0% {
+        transform: translate(0, 0) rotate(45deg);
         opacity: 0;
-        background-position: -250px -250px;
     }
-    70% {
+    5% {
         opacity: 0;
-        background-position: -250px -250px;
     }
-    74% {
+    10% {
         opacity: 1;
-        background-position: 20% 10%;
     }
-    82% {
+    18% {
+        transform: translate(200px, 200px) rotate(45deg);
         opacity: 0;
-        background-position: 55% 45%;
     }
     100% {
         opacity: 0;
-        background-position: 55% 45%;
     }
 }
 
