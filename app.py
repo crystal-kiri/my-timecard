@@ -611,19 +611,23 @@ if is_night:
     inset: 0;
     pointer-events: none;
     background:
-        radial-gradient(ellipse 18% 10% at 12% 18%, rgba(255,255,255,0.10), transparent 70%),
-        radial-gradient(ellipse 14% 8% at 20% 20%, rgba(255,255,255,0.08), transparent 70%),
-        radial-gradient(ellipse 20% 11% at 28% 17%, rgba(255,255,255,0.10), transparent 70%),
 
-        radial-gradient(ellipse 16% 9% at 52% 14%, rgba(255,255,255,0.09), transparent 70%),
-        radial-gradient(ellipse 12% 7% at 60% 16%, rgba(255,255,255,0.07), transparent 70%),
-        radial-gradient(ellipse 18% 10% at 68% 13%, rgba(255,255,255,0.09), transparent 70%),
+        /* 左の雲 */
+        radial-gradient(ellipse 22% 12% at 18% 20%, rgba(255,255,255,0.16), transparent 70%),
+        radial-gradient(ellipse 16% 9% at 25% 22%, rgba(255,255,255,0.12), transparent 70%),
+        radial-gradient(ellipse 20% 11% at 30% 18%, rgba(255,255,255,0.14), transparent 70%),
 
-        radial-gradient(ellipse 20% 11% at 82% 22%, rgba(255,255,255,0.08), transparent 70%),
-        radial-gradient(ellipse 14% 8% at 90% 24%, rgba(255,255,255,0.06), transparent 70%);
+        /* 真ん中の雲 */
+        radial-gradient(ellipse 20% 11% at 55% 15%, rgba(255,255,255,0.15), transparent 70%),
+        radial-gradient(ellipse 14% 8% at 60% 17%, rgba(255,255,255,0.11), transparent 70%),
+        radial-gradient(ellipse 18% 10% at 65% 13%, rgba(255,255,255,0.13), transparent 70%),
+
+        /* 右の雲 */
+        radial-gradient(ellipse 22% 12% at 85% 22%, rgba(255,255,255,0.14), transparent 70%),
+        radial-gradient(ellipse 16% 9% at 92% 24%, rgba(255,255,255,0.10), transparent 70%);
 
     opacity: 1;
-    animation: cloudMove 28s ease-in-out infinite alternate;
+    animation: cloudMove 35s ease-in-out infinite alternate;
     z-index: 0;
     }
 
