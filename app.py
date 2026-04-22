@@ -358,7 +358,7 @@ def calc_work_duration(start_str, end_str, break_minutes):
 def save_to_gsheets(name, action, break_minutes=0):
     now_jst = datetime.now(JST)
     today = now_jst.strftime('%Y-%m-%d')
-    time_str = now_jst.strftime('%H:%M:%S')
+    time_str = now_jst.strftime('%H:%M)
 
     try:
         df = conn.read(spreadsheet=URL, worksheet=name, ttl=60)
