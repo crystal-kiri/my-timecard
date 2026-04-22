@@ -567,3 +567,58 @@ div[data-testid="stExpander"] div[data-baseweb="input"] button {
 """
 
 st.markdown(expander_css, unsafe_allow_html=True)
+
+if is_night:
+    st.markdown("""
+    <style>
+
+    .stApp {
+        background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%) !important;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stApp::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background:
+            radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.8), transparent 60%),
+            radial-gradient(1.5px 1.5px at 70% 60%, rgba(255,255,255,0.7), transparent 60%),
+            radial-gradient(2px 2px at 40% 80%, rgba(255,255,255,0.75), transparent 60%),
+            radial-gradient(1px 1px at 90% 20%, rgba(255,255,255,0.7), transparent 60%);
+        opacity: 0.6;
+        animation: twinkle 4s ease-in-out infinite alternate;
+        z-index: 0;
+    }
+
+    .stApp::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background:
+            radial-gradient(ellipse 30% 12% at 20% 18%, rgba(255,255,255,0.05), transparent 70%),
+            radial-gradient(ellipse 26% 10% at 70% 28%, rgba(255,255,255,0.04), transparent 70%);
+        z-index: 0;
+        animation: cloudMove 50s linear infinite alternate;
+    }
+
+    @keyframes twinkle {
+        from { opacity: 0.35; }
+        to { opacity: 0.75; }
+    }
+
+    @keyframes cloudMove {
+        from { transform: translateX(0); }
+        to { transform: translateX(2%); }
+    }
+
+    .stApp > div {
+        position: relative;
+        z-index: 1;
+    }
+
+    </style>
+    """, unsafe_allow_html=True)
