@@ -612,22 +612,17 @@ if is_night:
     pointer-events: none;
     background:
 
-        /* かわいい雲① */
-        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.18) 0%, transparent 60%),
-        radial-gradient(circle at 24% 22%, rgba(255,255,255,0.16) 0%, transparent 60%),
-        radial-gradient(circle at 28% 20%, rgba(255,255,255,0.18) 0%, transparent 60%),
+        /* 左の小さめ雲 */
+        radial-gradient(circle at 18% 18%, rgba(255,255,255,0.12) 0%, transparent 40%),
+        radial-gradient(circle at 22% 20%, rgba(255,255,255,0.10) 0%, transparent 40%),
+        radial-gradient(circle at 26% 18%, rgba(255,255,255,0.12) 0%, transparent 40%),
 
-        /* かわいい雲② */
-        radial-gradient(circle at 60% 18%, rgba(255,255,255,0.17) 0%, transparent 60%),
-        radial-gradient(circle at 64% 20%, rgba(255,255,255,0.15) 0%, transparent 60%),
-        radial-gradient(circle at 68% 18%, rgba(255,255,255,0.17) 0%, transparent 60%),
+        /* 右の小さめ雲 */
+        radial-gradient(circle at 78% 22%, rgba(255,255,255,0.11) 0%, transparent 40%),
+        radial-gradient(circle at 82% 24%, rgba(255,255,255,0.09) 0%, transparent 40%);
 
-        /* かわいい雲③ */
-        radial-gradient(circle at 85% 25%, rgba(255,255,255,0.16) 0%, transparent 60%),
-        radial-gradient(circle at 90% 27%, rgba(255,255,255,0.14) 0%, transparent 60%);
-
-    opacity: 1;
-    animation: cloudMove 40s ease-in-out infinite alternate;
+    opacity: 0.7;
+    animation: cloudMove 45s ease-in-out infinite alternate;
     z-index: 0;
 }
 
