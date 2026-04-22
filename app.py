@@ -569,36 +569,38 @@ if is_night:
     st.markdown("""
     <style>
     .stApp::after {
-        content: "";
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        background:
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.95;
+    filter: blur(1.5px);
+    animation: cloudMove 50s ease-in-out infinite alternate;
+    background:
+        /* 雲1 */
+        radial-gradient(circle at 12% 18%, rgba(255,255,255,0.20) 0 18px, transparent 19px),
+        radial-gradient(circle at 16% 16%, rgba(255,255,255,0.24) 0 22px, transparent 23px),
+        radial-gradient(circle at 20% 18%, rgba(255,255,255,0.20) 0 18px, transparent 19px),
+        radial-gradient(ellipse at 16% 21%, rgba(255,255,255,0.16) 0 28px, transparent 29px),
 
-            /* 左の雲 */
-            radial-gradient(circle at 20% 18%, rgba(255,255,255,0.20) 0%, transparent 45%),
-            radial-gradient(circle at 24% 20%, rgba(255,255,255,0.18) 0%, transparent 45%),
-            radial-gradient(circle at 28% 18%, rgba(255,255,255,0.20) 0%, transparent 45%),
+        /* 雲2 */
+        radial-gradient(circle at 46% 14%, rgba(255,255,255,0.18) 0 16px, transparent 17px),
+        radial-gradient(circle at 50% 12%, rgba(255,255,255,0.23) 0 21px, transparent 22px),
+        radial-gradient(circle at 54% 14%, rgba(255,255,255,0.18) 0 16px, transparent 17px),
+        radial-gradient(ellipse at 50% 17%, rgba(255,255,255,0.14) 0 26px, transparent 27px),
 
-            /* 真ん中の雲 */
-            radial-gradient(circle at 55% 15%, rgba(255,255,255,0.18) 0%, transparent 45%),
-            radial-gradient(circle at 60% 17%, rgba(255,255,255,0.16) 0%, transparent 45%),
+        /* 雲3 */
+        radial-gradient(circle at 78% 22%, rgba(255,255,255,0.18) 0 16px, transparent 17px),
+        radial-gradient(circle at 82% 20%, rgba(255,255,255,0.22) 0 20px, transparent 21px),
+        radial-gradient(circle at 86% 22%, rgba(255,255,255,0.18) 0 16px, transparent 17px),
+        radial-gradient(ellipse at 82% 25%, rgba(255,255,255,0.14) 0 25px, transparent 26px);
+}
 
-            /* 右の雲 */
-            radial-gradient(circle at 85% 22%, rgba(255,255,255,0.17) 0%, transparent 45%),
-            radial-gradient(circle at 90% 24%, rgba(255,255,255,0.15) 0%, transparent 45%);
-
-        opacity: 0.9;
-        animation: cloudMove 60s ease-in-out infinite alternate;
-        z-index: 0.5;
-        filter: blur(6px);
-    }
-
-    @keyframes cloudMove {
-        from { transform: translateX(0); }
-        to { transform: translateX(2%); }
-    }
-
+@keyframes cloudMove {
+    from { transform: translateX(0); }
+    to { transform: translateX(2%); }
+}
     .stApp > div {
         position: relative;
         z-index: 1;
