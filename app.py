@@ -565,8 +565,39 @@ div[data-testid="stExpander"] div[data-baseweb="input"] button {
 }
 </style>
 """
+if is_night:
+    st.markdown("""
+    <style>
+    .stApp::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background:
 
-.stApp {{
-    {"background: linear-gradient(180deg, #08111f 0%, #13233d 55%, #1a2741 100%) !important;" if is_night else f"background-color: {bg_color} !important;"}
-    font-family: 'Noto Sans JP', sans-serif;
-}}
+            /* 左の小さめ雲 */
+            radial-gradient(circle at 18% 18%, rgba(255,255,255,0.12) 0%, transparent 40%),
+            radial-gradient(circle at 22% 20%, rgba(255,255,255,0.10) 0%, transparent 40%),
+            radial-gradient(circle at 26% 18%, rgba(255,255,255,0.12) 0%, transparent 40%),
+
+            /* 右の小さめ雲 */
+            radial-gradient(circle at 78% 22%, rgba(255,255,255,0.11) 0%, transparent 40%),
+            radial-gradient(circle at 82% 24%, rgba(255,255,255,0.09) 0%, transparent 40%);
+
+        opacity: 0.7;
+        animation: cloudMove 45s ease-in-out infinite alternate;
+        z-index: 0;
+    }
+
+    @keyframes cloudMove {
+        from { transform: translateX(0); }
+        to { transform: translateX(3%); }
+    }
+
+    .stApp > div {
+        position: relative;
+        z-index: 1;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
