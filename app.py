@@ -42,7 +42,7 @@ st.markdown(f"""
 
 /* 基本背景とコンテナ */
 .stApp {{
-    background-color: {bg_color} !important;
+    {"background: linear-gradient(180deg, #161445 0%, #0b0f2a 60%, #020617 100%) !important;" if is_night else f"background-color: {bg_color} !important;"}
     font-family: 'Noto Sans JP', sans-serif;
 }}
 
