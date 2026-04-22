@@ -586,7 +586,7 @@ if is_night:
 
         opacity: 0.7;
         animation: cloudMove 45s ease-in-out infinite alternate;
-        z-index: 0;
+        z-index: 0.5;
     }
 
     @keyframes cloudMove {
