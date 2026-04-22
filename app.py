@@ -640,6 +640,44 @@ if is_night:
         position: relative;
         z-index: 1;
     }
+/* 流れ星 */
+.stApp::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: none;
+    z-index: 0;
+}
+
+.shooting-star {
+    position: fixed;
+    width: 2px;
+    height: 80px;
+    background: linear-gradient(white, transparent);
+    opacity: 0;
+    transform: rotate(45deg);
+    animation: shoot 6s linear infinite;
+}
+
+@keyframes shoot {
+    0% {
+        top: -10%;
+        left: 20%;
+        opacity: 0;
+    }
+    5% {
+        opacity: 1;
+    }
+    15% {
+        top: 60%;
+        left: 80%;
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+    }
+}
 
     </style>
     """, unsafe_allow_html=True)
