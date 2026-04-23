@@ -303,8 +303,7 @@ button[data-baseweb="tab"] {{ border-radius: 999px !important; background: rgba(
 button[aria-selected="true"][data-baseweb="tab"] {{ background: linear-gradient(90deg, #FFD778 0%, #F5A8CD 48%, #B8A2FF 100%) !important; }}
 div[data-baseweb="input"] > div {{ border-radius: 16px !important; border: 1px solid var(--line) !important; background: rgba(255,255,255,0.88) !important; box-shadow: var(--shadow-sm), var(--inner) !important; }}
 [data-testid="stStatusWidget"], [data-testid="stDecoration"], [data-testid="stToolbar"], [data-testid="stHeader"], [data-testid="stToast"], .stSpinner {{ display: none !important; }}
-st.markdown("""
-<style>
+
 
 /* ===== Streamlit感を消す ===== */
 section.main > div {
