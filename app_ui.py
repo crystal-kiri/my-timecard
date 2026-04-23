@@ -483,8 +483,7 @@ def run_streamlit_app() -> None:
 
     try:
         _secrets = dict(st.secrets["connections"]["gsheets"])
-        _secrets["private_key"] = _secrets["private_key"].replace("\n", "
-")
+        _secrets["private_key"] = _secrets["private_key"].replace("\n", "\n")
         conn = st.connection("gsheets", type=GSheetsConnection)
         names = read_member_names(conn)
     except Exception:
