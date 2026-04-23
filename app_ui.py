@@ -303,6 +303,74 @@ button[data-baseweb="tab"] {{ border-radius: 999px !important; background: rgba(
 button[aria-selected="true"][data-baseweb="tab"] {{ background: linear-gradient(90deg, #FFD778 0%, #F5A8CD 48%, #B8A2FF 100%) !important; }}
 div[data-baseweb="input"] > div {{ border-radius: 16px !important; border: 1px solid var(--line) !important; background: rgba(255,255,255,0.88) !important; box-shadow: var(--shadow-sm), var(--inner) !important; }}
 [data-testid="stStatusWidget"], [data-testid="stDecoration"], [data-testid="stToolbar"], [data-testid="stHeader"], [data-testid="stToast"], .stSpinner {{ display: none !important; }}
+st.markdown("""
+<style>
+
+/* ===== Streamlit感を消す ===== */
+section.main > div {
+    padding-top: 0 !important;
+}
+
+[data-testid="stVerticalBlock"] > div {
+    gap: 0.6rem;
+}
+
+/* ===== 全体を1枚の作品にする ===== */
+.main-container {
+    position: relative;
+    padding: 20px;
+}
+
+/* ===== ぷくっとしたカード ===== */
+.soft-card {
+    background: linear-gradient(145deg, #ffffff, #f3eaff);
+    border-radius: 30px;
+    padding: 20px;
+    box-shadow:
+        0 20px 40px rgba(200,180,255,0.25),
+        inset 0 2px 6px rgba(255,255,255,0.8);
+    backdrop-filter: blur(10px);
+}
+
+/* ===== 3Dボタン化 ===== */
+.stButton > button {
+    border-radius: 30px !important;
+    background: linear-gradient(145deg, #ffd6ea, #d7c6ff) !important;
+    box-shadow:
+        0 10px 25px rgba(200,180,255,0.3),
+        inset 0 3px 6px rgba(255,255,255,0.9);
+    border: none !important;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+.stButton > button:active {
+    transform: scale(0.96);
+}
+
+/* ===== セレクトも立体化 ===== */
+div[data-baseweb="select"] > div {
+    border-radius: 28px !important;
+    background: linear-gradient(145deg, #fff, #f0e7ff) !important;
+    box-shadow:
+        0 10px 20px rgba(200,180,255,0.25),
+        inset 0 2px 6px rgba(255,255,255,0.9);
+}
+
+/* ===== 浮遊オブジェ ===== */
+.floating {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(1px);
+    opacity: 0.7;
+}
+
+.f1 { width: 80px; height: 80px; background:#ffd6ea; top:20px; left:10px;}
+.f2 { width: 60px; height: 60px; background:#d7c6ff; top:120px; right:20px;}
+.f3 { width: 40px; height: 40px; background:#fff2c6; bottom:20px; left:40px;}
+
+</style>
+""", unsafe_allow_html=True)
 </style>
 """,
         unsafe_allow_html=True,
@@ -342,7 +410,11 @@ draw();
 """,
         height=210,
     )
-
+st.markdown("""
+<div class="floating f1"></div>
+<div class="floating f2"></div>
+<div class="floating f3"></div>
+""", unsafe_allow_html=True)
 
 def render_lock_selectbox_typing(st_module: Any) -> None:
     """Prevent typing into the Streamlit select box search input."""
