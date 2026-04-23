@@ -131,11 +131,16 @@ def read_member_names(conn: Any) -> list[str]:
 def save_to_gsheets(conn: Any, name: str, action: str, break_minutes: int = 0) -> tuple[bool, str]:
     """Persist attendance changes.
 
+    In demo mode, conn can be None and the function becomes a no-op.
+
     Returns
     -------
     tuple[bool, str]
         (success, message)
     """
+    if conn is None:
+        return True, f"デモモード: {name} さんの{action}表示だけ更新しました"
+
     now_jst = datetime.now(JST)
     today = now_jst.strftime("%Y-%m-%d")
     time_str = now_jst.strftime("%H:%M")
@@ -374,9 +379,14 @@ def render_lock_selectbox_typing(st_module: Any) -> None:
     )
 
 
-def render_admin_panel(st_module: Any, conn: Any) -> None:
+def render_admin_panel(st_module: Any, conn: Any, demo_mode: bool = False) -> None:
     """Render admin tools."""
     st_module.write("---")
+
+    if demo_mode:
+        with st_module.expander("🛠 管理者メニュー"):
+            st_module.info("デモモードです。管理機能とGoogle Sheets連携は停止しています。")
+        return
 
     with st_module.expander("🛠 管理者メニュー"):
         pw = st_module.text_input("パスワード", type="password")
@@ -468,19 +478,23 @@ def run_streamlit_app() -> None:
     disp_text = str(theme["disp_text"])
     clock_col = str(theme["clock_col"])
 
-    # Touch secrets to preserve original behavior and fail early if not configured.
-    _secrets = dict(st.secrets["connections"]["gsheets"])
-    _secrets["private_key"] = _secrets["private_key"].replace("\\n", "\n")
+    demo_mode = False
+    conn = None
 
-    conn = st.connection("gsheets", type=GSheetsConnection)
+    try:
+        _secrets = dict(st.secrets["connections"]["gsheets"])
+        _secrets["private_key"] = _secrets["private_key"].replace("\n", "
+")
+        conn = st.connection("gsheets", type=GSheetsConnection)
+        names = read_member_names(conn)
+    except Exception:
+        demo_mode = True
+        names = ["yurika kiriyama", "momo sakura", "hana suzune"]
 
     inject_styles(st, disp_text, clock_col)
 
-    try:
-        names = read_member_names(conn)
-    except Exception as e:
-        st.error(f"スタッフ名簿の読み込みに失敗しました: {e}")
-        st.stop()
+    if demo_mode:
+        st.info("デモモードです。見た目確認用のため、Google Sheets連携はオフです。")
 
     st.markdown('<div class="soft-title">TIME CARD</div>', unsafe_allow_html=True)
     selected_name = st.selectbox("USER", names, label_visibility="collapsed")
@@ -526,7 +540,7 @@ def run_streamlit_app() -> None:
             else:
                 st.error(message)
 
-    render_admin_panel(st, conn)
+    render_admin_panel(st, conn, demo_mode=demo_mode)
 
 
 class TimeCardTests(unittest.TestCase):
@@ -557,6 +571,11 @@ class TimeCardTests(unittest.TestCase):
         theme = get_theme(datetime(2026, 1, 1, 21, 0, tzinfo=JST))
         self.assertTrue(theme["is_night"])
         self.assertEqual(theme["clock_col"], "#8A7FB1")
+
+    def test_save_to_gsheets_demo_mode(self) -> None:
+        success, message = save_to_gsheets(None, "yurika kiriyama", "出勤", 0)
+        self.assertTrue(success)
+        self.assertIn("デモモード", message)
 
 
 if __name__ == "__main__":
