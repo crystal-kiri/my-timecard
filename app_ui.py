@@ -369,8 +369,7 @@ div[data-baseweb="select"] > div {
 .f2 { width: 60px; height: 60px; background:#d7c6ff; top:120px; right:20px;}
 .f3 { width: 40px; height: 40px; background:#fff2c6; bottom:20px; left:40px;}
 
-</style>
-""", unsafe_allow_html=True)
+
 </style>
 """,
         unsafe_allow_html=True,
