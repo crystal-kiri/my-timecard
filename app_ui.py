@@ -306,22 +306,20 @@ div[data-baseweb="input"] > div {{ border-radius: 16px !important; border: 1px s
 
 
 /* ===== Streamlit感を消す ===== */
-section.main > div {
+section.main > div {{
     padding-top: 0 !important;
-}
+}}
 
-[data-testid="stVerticalBlock"] > div {
+[data-testid="stVerticalBlock"] > div {{
     gap: 0.6rem;
-}
+}}
 
-/* ===== 全体を1枚の作品にする ===== */
-.main-container {
+.main-container {{
     position: relative;
     padding: 20px;
-}
+}}
 
-/* ===== ぷくっとしたカード ===== */
-.soft-card {
+.soft-card {{
     background: linear-gradient(145deg, #ffffff, #f3eaff);
     border-radius: 30px;
     padding: 20px;
@@ -329,10 +327,9 @@ section.main > div {
         0 20px 40px rgba(200,180,255,0.25),
         inset 0 2px 6px rgba(255,255,255,0.8);
     backdrop-filter: blur(10px);
-}
+}}
 
-/* ===== 3Dボタン化 ===== */
-.stButton > button {
+.stButton > button {{
     border-radius: 30px !important;
     background: linear-gradient(145deg, #ffd6ea, #d7c6ff) !important;
     box-shadow:
@@ -341,32 +338,31 @@ section.main > div {
     border: none !important;
     font-weight: 600;
     letter-spacing: 0.05em;
-}
+}}
 
-.stButton > button:active {
+.stButton > button:active {{
     transform: scale(0.96);
-}
+}}
 
-/* ===== セレクトも立体化 ===== */
-div[data-baseweb="select"] > div {
+div[data-baseweb="select"] > div {{
     border-radius: 28px !important;
     background: linear-gradient(145deg, #fff, #f0e7ff) !important;
     box-shadow:
         0 10px 20px rgba(200,180,255,0.25),
         inset 0 2px 6px rgba(255,255,255,0.9);
-}
+}}
 
-/* ===== 浮遊オブジェ ===== */
-.floating {
-    position: absolute;
+.floating {{
+    position: fixed;
     border-radius: 50%;
     filter: blur(1px);
     opacity: 0.7;
-}
+    z-index: 0;
+}}
 
-.f1 { width: 80px; height: 80px; background:#ffd6ea; top:20px; left:10px;}
-.f2 { width: 60px; height: 60px; background:#d7c6ff; top:120px; right:20px;}
-.f3 { width: 40px; height: 40px; background:#fff2c6; bottom:20px; left:40px;}
+.f1 {{ width: 80px; height: 80px; background:#ffd6ea; top:20px; left:10px; }}
+.f2 {{ width: 60px; height: 60px; background:#d7c6ff; top:120px; right:20px; }}
+.f3 {{ width: 40px; height: 40px; background:#fff2c6; bottom:20px; left:40px; }}
 
 
 </style>
