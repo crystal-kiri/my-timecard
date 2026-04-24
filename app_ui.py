@@ -557,7 +557,7 @@ def run_streamlit_app() -> None:
         names = ["yurika kiriyama", "momo sakura", "hana suzune"]
 
     inject_styles(st, disp_text, clock_col)
-　　st.markdown("""
+　　 st.markdown("""
 　　<div class="floating f1"></div>
 　　<div class="floating f2"></div>
 　　<div class="floating f3"></div>
